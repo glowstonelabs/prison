@@ -37,7 +37,7 @@ class Prison : JavaPlugin() {
         try {
             SpigotCommandManager(this).apply {
                 registerCommands("wtf.amari.prison.commands")
-                registerCommands("wtf.amari.prison.guis")
+                registerCommands("wtf.amari.prison.pickaxe")
             }
             logger.info("Commands registered successfully.")
         } catch (e: Exception) {

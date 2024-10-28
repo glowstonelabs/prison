@@ -13,6 +13,7 @@ repositories {
     maven("https://jitpack.io")
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
     maven("https://repo.codemc.io/repository/maven-snapshots/")
+    maven("https://repo.codemc.io/repository/maven-public/")
 }
 
 val versions = mapOf(
@@ -26,19 +27,21 @@ val versions = mapOf(
     "placeholderApi" to "2.11.6",
     "kotlinCoroutines" to "1.9.0",
     "boostedyaml" to "1.3.7",
+    "itemnbtapi" to "2.13.2"
 )
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:${versions["paperApi"]}")
+    compileOnly("me.clip:placeholderapi:${versions["placeholderApi"]}")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${versions["kotlinStdlib"]}")
     implementation("com.github.honkling.commando:spigot:${versions["commando"]}")
     implementation("org.mongodb:mongodb-driver-kotlin-sync:${versions["mongodbDriver"]}")
     implementation("com.github.DebitCardz:mc-chestui-plus:${versions["mcChestUi"]}")
     implementation("io.github.cdimascio:dotenv-kotlin:${versions["dotenv"]}")
     implementation("net.wesjd:anvilgui:${versions["anvilGui"]}")
-    implementation ("dev.dejvokep:boosted-yaml:${versions["boostedyaml"]}")
-    compileOnly("me.clip:placeholderapi:${versions["placeholderApi"]}")
+    implementation("dev.dejvokep:boosted-yaml:${versions["boostedyaml"]}")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${versions["kotlinCoroutines"]}")
+    compileOnly("de.tr7zw:item-nbt-api-plugin:${versions["itemnbtapi"]}")
 }
 
 val targetJavaVersion = 21

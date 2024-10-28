@@ -2,3 +2,4 @@ name: prison
 version: '1.0-SNAPSHOT'
 main: wtf.amari.prison.Prison
 api-version: '1.21'
+depend: [ NBTAPI ]

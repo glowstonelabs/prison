@@ -1,6 +1,5 @@
 package wtf.amari.prison.events
 
-import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit.broadcast
 import org.bukkit.Bukkit.getScheduler
 import org.bukkit.event.EventHandler
@@ -8,7 +7,6 @@ import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import wtf.amari.prison.Prison
-import wtf.amari.prison.Prison.Companion.config
 import wtf.amari.prison.utils.mm
 
 class PlayerListener : Listener {
@@ -32,15 +30,7 @@ class PlayerListener : Listener {
             }
         }
 
-        val joinMessages = listOf(
-            " ",
-            " &fWelcome to <#1db4d5>&lZelaMC&r!",
-            " ",
-            "<#1d90d5>│ &rIP: <#1db4d5>play.Zelamc.net",
-            "<#1d90d5>│ &rStore: <#1db4d5>store.Zelamc.net",
-            "<#1d90d5>│ &rDiscord: <#1db4d5>discord.Zelamc.net",
-            " "
-        )
+        val joinMessages = config.getStringList("messages.welcome-messages")
 
         scheduler.runTaskLater(instance, Runnable {
             joinMessages.forEach { message -> player.sendMessage(message.mm()) }
@@ -49,10 +39,12 @@ class PlayerListener : Listener {
 
     @EventHandler
     fun onQuit(event: PlayerQuitEvent) {
+        val instance = Prison.instance
+        val config = instance.config
         val player = event.player
-        val leavemessage = config.getString("messages.joinmessage")
-        if (leavemessage != null) {
-            event.quitMessage(leavemessage.replace("%player%", player.name).mm())
-        }
+        val quitmessage = config.getString("messages.quitmessage")
+        event.quitMessage(
+            if (quitmessage.isNullOrEmpty()) null else quitmessage.replace("%player%", event.player.name).mm()
+        )
     }
 }
