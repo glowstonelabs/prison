@@ -6,6 +6,7 @@ on:
 
 permissions:
   contents: write  # Allows creating releases and uploading assets
+  packages: write   # Allows uploading packages, if needed
 
 jobs:
   build:
@@ -20,15 +21,41 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '21'
+          cache: gradle
+
+      - name: Cache Gradle packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            gradle-${{ runner.os }}-
 
       - name: Grant execute permission for gradlew
-        run: chmod +x gradlew  # Grant execute permission
+        run: chmod +x gradlew
 
       - name: Build with Gradle
         run: ./gradlew clean shadowJar --no-daemon
 
       - name: List build directory
-        run: ls -al build/libs  # Lists files in the build/libs directory
+        run: ls -R build/libs
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: Plugin JAR
+          path: build/libs/prison-1.0-all.jar  # Update the path to the specific JAR file
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
       - name: Generate Release Tag
         id: generate_tag
