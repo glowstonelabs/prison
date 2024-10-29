@@ -7,15 +7,27 @@ import org.bukkit.Bukkit
 
 val mm = MiniMessage.miniMessage()
 
-fun log(message: String) = log(message.mm())
+object Colors {
+    const val PRIMARY = "#1db4d5"
+    const val SECONDARY = "#ffffff"
+    const val ERROR = "#ff4747"
+    const val SUCCESS = "#47ff47"
+    const val WARNING = "#ffd747"
+    const val INFO = "#1db4d5"
+    const val BROADCAST = "#1db4d5"
+    const val SYSTEM = "#1db4d5"
+}
 
+// Logging function with timestamp
 fun log(message: Component) {
-    Bukkit.getConsoleSender().sendMessage(message)
+    val timeStamp = System.currentTimeMillis()
+    Bukkit.getConsoleSender().sendMessage("[$timeStamp] $message")
 }
 
 fun String.mm(): Component = mm.deserialize(this.convertLegacyColors())
     .decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE)
 
+// Gradient text
 fun String.mainGradient(): Component = "<gradient:#b8ecff:#77daff>${this}</gradient>".mm()
 
 fun String.convertLegacyColors(): String = this
@@ -66,15 +78,16 @@ fun String.convertNewColors(): String = this
     .replace("&o", "§o")
     .replace("&r", "§r")
 
-fun String.gradientText(startColor: String, endColor: String): Component =
-    "<gradient:$startColor:$endColor><bold>${this}</bold></gradient>".mm()
+fun String.gradientText(vararg colors: String): Component {
+    val gradient = colors.joinToString(":") { it }
+    return "<gradient:$gradient>${this}</gradient>".mm()
+}
 
 // Rainbow gradient text
-fun String.rainbow(): Component =
-    "<rainbow>${this}</rainbow>".mm()
+fun String.rainbow(): Component = "<rainbow>${this}</rainbow>".mm()
 
 // Prison-style title with custom colors
-fun String.prisonTitle(primary: String = "#1db4d5", secondary: String = "#ffffff"): Component =
+fun String.prisonTitle(primary: String = Colors.PRIMARY, secondary: String = Colors.SECONDARY): Component =
     "<$primary>✦ <$secondary>${this}".mm()
 
 // Hoverable text with tooltip
@@ -96,7 +109,7 @@ fun String.withUrl(url: String): Component =
 // Progress bar (useful for pickaxe levels etc)
 fun createProgressBar(
     current: Int, max: Int, length: Int = 10,
-    filledColor: String = "#1db4d5", emptyColor: String = "gray"
+    filledColor: String = Colors.PRIMARY, emptyColor: String = "gray"
 ): Component {
     val progress = (current.toFloat() / max * length).toInt()
     return "<$filledColor>${"■".repeat(progress)}<$emptyColor>${"■".repeat(length - progress)}".mm()
@@ -104,13 +117,13 @@ fun createProgressBar(
 
 // Common prison prefixes
 object Prefix {
-    val ERROR = "<#ff4747>✖ ".mm()
-    val SUCCESS = "<#47ff47>✔ ".mm()
-    val INFO = "<#1db4d5>✦ ".mm()
-    val WARNING = "<#ffd747>⚠ ".mm()
-    val ADMIN = "<#ff4747>⚡ ".mm()
-    val BROADCAST = "<#1db4d5>» ".mm()
-    val SYSTEM = "<#1db4d5>✦ ".mm()
+    val ERROR = "<${Colors.ERROR}>✖ ".mm()
+    val SUCCESS = "<${Colors.SUCCESS}>✔ ".mm()
+    val INFO = "<${Colors.INFO}>✦ ".mm()
+    val WARNING = "<${Colors.WARNING}>⚠ ".mm()
+    val ADMIN = "<${Colors.ERROR}>⚡ ".mm()
+    val BROADCAST = "<${Colors.BROADCAST}>» ".mm()
+    val SYSTEM = "<${Colors.SYSTEM}>✦ ".mm()
 }
 
 // Prison-style list item
@@ -125,11 +138,11 @@ fun createStatsLine(
     "<$labelColor>${label}: <$valueColor>${value}".mm()
 
 // Fading text (good for titles)
-fun String.fade(fromColor: String = "#1db4d5", toColor: String = "#ffffff"): Component =
+fun String.fade(fromColor: String = Colors.PRIMARY, toColor: String = Colors.SECONDARY): Component =
     "<gradient:${fromColor}:${toColor}>${this}</gradient>".mm()
 
 // Boxed message (good for announcements)
-fun String.box(borderColor: String = "#1db4d5", textColor: String = "white"): Component = """
+fun String.box(borderColor: String = Colors.PRIMARY, textColor: String = "white"): Component = """
      
     <$borderColor>┌────────────────────────┐
     <$borderColor>│ <$textColor>${this.center(20)}<$borderColor> │
@@ -161,7 +174,7 @@ fun Number.shorthand(): String {
 }
 
 // Create a bordered line
-fun createLine(color: String = "#1db4d5", symbol: String = "▬"): Component =
+fun createLine(color: String = Colors.PRIMARY, symbol: String = "▬"): Component =
     "<$color>${symbol.repeat(40)}".mm()
 
 // Money format

@@ -8,7 +8,6 @@
 
 package wtf.amari.prison.pickaxe
 
-
 import de.tr7zw.nbtapi.NBTItem
 import me.honkling.commando.common.annotations.Command
 import org.bukkit.Bukkit.getPlayer
@@ -17,7 +16,6 @@ import org.bukkit.Sound
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import wtf.amari.prison.Prison
-import wtf.amari.prison.utils.convertNewColors
 import wtf.amari.prison.utils.mm
 
 fun givepickaxe(executor: Player, targetName: String?) {
@@ -27,25 +25,34 @@ fun givepickaxe(executor: Player, targetName: String?) {
             val meta = itemMeta
             val instance = Prison.instance
             val config = instance.config
-
-            meta.displayName(config.getString("pickaxe.name")?.mm())
-
-            meta.lore = config.getStringList("pickaxe.lore").map { it.convertNewColors() }
-
-            meta.isUnbreakable = true
-
             val nbt = NBTItem(this)
-            nbt.setInteger("blocksMined", 0)
+
             nbt.setInteger("pickaxeLevel", 1)
             nbt.setInteger("fortune", 1)
-            nbt.setInteger("tokenFinder", 1)
-            nbt.setBoolean("isZelaPickaxe", true)
+            nbt.setInteger("tokenFinder", 2)
+            nbt.setBoolean("isPrisonPickaxe", true)
+
+
+            meta.displayName(
+                config.getString("pickaxe.name")?.replace("%pickaxelevel%", nbt.getInteger("pickaxeLevel").toString())
+                    ?.mm()
+            )
+
+            meta.lore(config.getStringList("pickaxe.lore").map { loreLine ->
+                loreLine
+                    .replace("%fortune%", nbt.getInteger("fortune").toString())
+                    .replace("%tokenfinder%", nbt.getInteger("tokenFinder").toString())
+            }.map { it.mm() })
+
 
             itemMeta = meta
+
+            meta.addEnchant(org.bukkit.enchantments.Enchantment.EFFICIENCY, 100, true)
+            meta.addItemFlags(org.bukkit.inventory.ItemFlag.HIDE_ENCHANTS)
+            meta.isUnbreakable = true
         }
 
         target.inventory.addItem(pickaxe)
-
         target.playSound(target.location, Sound.ENTITY_PLAYER_LEVELUP, 1f, 1f)
     } else {
         executor.sendMessage("&cPlayer not found!".mm())
