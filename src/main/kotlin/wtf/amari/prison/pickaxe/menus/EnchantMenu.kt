@@ -6,14 +6,14 @@ import me.tech.mcchestui.GUIType
 import me.tech.mcchestui.item.item
 import me.tech.mcchestui.utils.gui
 import me.tech.mcchestui.utils.openGUI
-import org.bukkit.Bukkit.broadcast
 import org.bukkit.Material
 import org.bukkit.entity.Player
+import org.bukkit.inventory.ItemStack
 import wtf.amari.prison.Prison
-import wtf.amari.prison.pickaxe.events.PickaxeListener
+import wtf.amari.prison.pickaxe.PickaxeManager
 import wtf.amari.prison.utils.mm
 
-fun createEnchantGUI(player: Player): GUI {
+fun createEnchantGUI(player: Player, pickaxeManager: PickaxeManager): GUI {
     return gui(
         plugin = Prison.instance,
         title = "<#36393F>&lEnchants".mm(),
@@ -27,14 +27,14 @@ fun createEnchantGUI(player: Player): GUI {
                 glowing = true
                 onClick {
                     it.closeInventory()
-                    player.openGUI(fortuneUpgradeGUI(player))
+                    player.openGUI(fortuneUpgradeGUI(player, pickaxeManager))
                 }
             }
         }
     }
 }
 
-fun fortuneUpgradeGUI(player: Player): GUI {
+fun fortuneUpgradeGUI(player: Player, pickaxeManager: PickaxeManager): GUI {
     return gui(
         plugin = Prison.instance,
         title = "<#36393F>&lUpgrade".mm(),
@@ -48,22 +48,25 @@ fun fortuneUpgradeGUI(player: Player): GUI {
                 glowing = true
                 onClick {
                     val itemInHand = player.inventory.itemInMainHand
-                    if (itemInHand.type == Material.DIAMOND_PICKAXE) {
+                    if (isPrisonPickaxe(itemInHand)) {
                         val nbt = NBTItem(itemInHand)
-                        if (nbt.getBoolean("isPrisonPickaxe")) {
-                            val fortune = nbt.getInteger("fortune") + 1
-                            PickaxeListener().updatePickaxeNBT(itemInHand, "fortune", fortune)
-                            PickaxeListener().updatePickaxeMeta(player, itemInHand)
-                            broadcast("&aFortune Level $fortune".mm())
-                        } else {
-                            player.sendMessage("This is not a prison pickaxe.".mm())
-                        }
+                        val fortune = nbt.getInteger("fortune") + 1
+                        pickaxeManager.updatePickaxeNBT(itemInHand, "fortune", fortune)
+                        pickaxeManager.updatePickaxeMeta(player, itemInHand)
+                        player.sendMessage("&aFortune Level $fortune".mm()) // Feedback to the player
                     } else {
-                        player.sendMessage("You are not holding a pickaxe.".mm())
+                        player.sendMessage("You are not holding a prison pickaxe.".mm())
                     }
                     it.closeInventory()
                 }
             }
         }
     }
+}
+
+
+// Helper function to check if the item is a prison pickaxe
+private fun isPrisonPickaxe(item: ItemStack): Boolean {
+    val nbt = NBTItem(item)
+    return nbt.getBoolean("isPrisonPickaxe")
 }

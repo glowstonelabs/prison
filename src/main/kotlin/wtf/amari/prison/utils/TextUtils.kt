@@ -9,14 +9,14 @@ val mm = MiniMessage.miniMessage()
 
 object Colors {
     val colors = mapOf(
-        "PRIMARY" to "#1db4d5",
-        "SECONDARY" to "#ffffff",
-        "ERROR" to "#ff4747",
-        "SUCCESS" to "#47ff47",
-        "WARNING" to "#ffd747",
-        "INFO" to "#1db4d5",
-        "BROADCAST" to "#1db4d5",
-        "SYSTEM" to "#1db4d5"
+        "PRIMARY" to "#3498db",    // Blue
+        "SECONDARY" to "#2ecc71",  // Green
+        "ERROR" to "#e74c3c",      // Red
+        "SUCCESS" to "#2ecc71",    // Green
+        "WARNING" to "#f1c40f",    // Yellow
+        "INFO" to "#3498db",       // Blue
+        "BROADCAST" to "#9b59b6",  // Purple
+        "SYSTEM" to "#34495e"      // Dark Blue
     )
 
     fun getColor(name: String): String {

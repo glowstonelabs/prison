@@ -29,11 +29,11 @@ class Prison : JavaPlugin() {
     override fun onEnable() {
         instance = this
         initializePlugin()
-        fancyLog("Prison plugin has been enabled successfully!", "INFO")
+        fancyLog("Prison plugin has been enabled successfully!", "SUCCESS")
     }
 
     override fun onDisable() {
-        fancyLog("Prison plugin has been disabled.", "INFO")
+        fancyLog("Prison plugin has been disabled.", "ERROR")
     }
 
     private fun initializePlugin() {

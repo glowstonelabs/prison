@@ -17,21 +17,20 @@ class PlayerListener : Listener {
         val scheduler = getScheduler()
         val instance = Prison.instance
         val config = instance.config
-
+        config.getString("messages.join")?.let {
+            event.joinMessage(it.replace("%player%", player.name).mm())
+        }
         if (!player.hasPlayedBefore()) {
             scheduler.runTaskLater(instance, Runnable {
-                broadcast(" ".mm())
-                event.joinMessage(config.getString("messages.firstjoin")?.replace("%player%", player.name)?.mm())
-                broadcast(" ".mm())
+                config.getString("messages.firstjoin")?.let {
+                    broadcast("".mm())
+                    broadcast(it.replace("%player%", player.name).mm())
+                }
             }, 20L)
-        } else {
-            config.getString("messages.join")?.let {
-                event.joinMessage(it.replace("%player%", player.name).mm())
-            }
         }
 
         scheduler.runTaskLater(instance, Runnable {
-            config.getStringList("messages.welcome-message").forEach { message ->
+            config.getStringList("messages.welcome-messages").forEach { message ->
                 player.sendMessage(message.mm())
             }
         }, 20L)
