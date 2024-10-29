@@ -71,6 +71,8 @@ jobs:
           draft: false
           prerelease: false
 
+      - name: List build directory
+        run: ls -al build/libs/
       - name: Upload JAR to Release
         if: steps.create_release.outputs.upload_url != ''
         uses: actions/upload-release-asset@v1
