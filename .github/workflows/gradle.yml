@@ -41,6 +41,12 @@ jobs:
       - name: List build directory
         run: ls -R build/libs
 
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: Plugin JAR
+          path: build/libs/prison-1.0-all.jar  # Update the path to the specific JAR file
+
   release:
     needs: build
     runs-on: ubuntu-latest
@@ -70,6 +76,6 @@ jobs:
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: build/libs/*.jar
+          asset_path: build/libs/prison-1.0-all.jar  # Update the path to the specific JAR file
           asset_name: plugin-${{ github.sha }}.jar
           asset_content_type: application/java-archive
