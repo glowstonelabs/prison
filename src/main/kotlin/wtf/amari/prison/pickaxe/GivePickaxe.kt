@@ -21,36 +21,34 @@ import wtf.amari.prison.utils.mm
 fun givepickaxe(executor: Player, targetName: String?) {
     val target = targetName?.let { getPlayer(it) }
     if (target != null) {
-        val pickaxe = ItemStack(Material.DIAMOND_PICKAXE).apply {
-            val meta = itemMeta
-            val instance = Prison.instance
-            val config = instance.config
-            val nbt = NBTItem(this)
-
-            nbt.setInteger("pickaxeLevel", 1)
-            nbt.setInteger("fortune", 1)
-            nbt.setInteger("tokenFinder", 2)
-            nbt.setBoolean("isPrisonPickaxe", true)
-
-
-            meta.displayName(
-                config.getString("pickaxe.name")?.replace("%pickaxelevel%", nbt.getInteger("pickaxeLevel").toString())
-                    ?.mm()
-            )
-
-            meta.lore(config.getStringList("pickaxe.lore").map { loreLine ->
-                loreLine
-                    .replace("%fortune%", nbt.getInteger("fortune").toString())
-                    .replace("%tokenfinder%", nbt.getInteger("tokenFinder").toString())
-            }.map { it.mm() })
-
-
-            itemMeta = meta
-
-            meta.addEnchant(org.bukkit.enchantments.Enchantment.EFFICIENCY, 100, true)
-            meta.addItemFlags(org.bukkit.inventory.ItemFlag.HIDE_ENCHANTS)
-            meta.isUnbreakable = true
+        val pickaxe = ItemStack(Material.DIAMOND_PICKAXE)
+        val nbt = NBTItem(pickaxe).apply {
+            setInteger("pickaxeLevel", 1)
+            setInteger("fortune", 1)
+            setInteger("tokenFinder", 2)
+            setBoolean("isPrisonPickaxe", true)
+            applyNBT(pickaxe)
         }
+
+        val config = Prison.instance.config
+        val meta = pickaxe.itemMeta ?: return
+
+        meta.displayName(
+            config.getString("pickaxe.name")
+                ?.replace("%pickaxelevel%", nbt.getInteger("pickaxeLevel").toString())
+                ?.mm() ?: "Prison Pickaxe".mm()
+        )
+
+        meta.lore(config.getStringList("pickaxe.lore").map {
+            it.replace("%fortune%", nbt.getInteger("fortune").toString())
+                .replace("%tokenfinder%", nbt.getInteger("tokenFinder").toString())
+                .mm()
+        })
+
+        meta.addEnchant(org.bukkit.enchantments.Enchantment.SHARPNESS, 100, true)
+        meta.addItemFlags(org.bukkit.inventory.ItemFlag.HIDE_ENCHANTS)
+        meta.isUnbreakable = true
+        pickaxe.itemMeta = meta
 
         target.inventory.addItem(pickaxe)
         target.playSound(target.location, Sound.ENTITY_PLAYER_LEVELUP, 1f, 1f)

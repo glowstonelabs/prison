@@ -33,6 +33,7 @@ val versions = mapOf(
 dependencies {
     compileOnly("io.papermc.paper:paper-api:${versions["paperApi"]}")
     compileOnly("me.clip:placeholderapi:${versions["placeholderApi"]}")
+    compileOnly("de.tr7zw:item-nbt-api-plugin:${versions["itemnbtapi"]}")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${versions["kotlinStdlib"]}")
     implementation("com.github.honkling.commando:spigot:${versions["commando"]}")
     implementation("org.mongodb:mongodb-driver-kotlin-sync:${versions["mongodbDriver"]}")
@@ -41,7 +42,6 @@ dependencies {
     implementation("net.wesjd:anvilgui:${versions["anvilGui"]}")
     implementation("dev.dejvokep:boosted-yaml:${versions["boostedyaml"]}")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${versions["kotlinCoroutines"]}")
-    compileOnly("de.tr7zw:item-nbt-api-plugin:${versions["itemnbtapi"]}")
 }
 
 val targetJavaVersion = 21
