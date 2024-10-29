@@ -53,10 +53,11 @@ class Prison : JavaPlugin() {
     }
 
     private fun registerEvents() {
-        listeners.forEach {
+        listeners.forEach { listenerSupplier ->
             try {
-                server.pluginManager.registerEvents(it(), this)
-                fancyLog("Events registered successfully.", "INFO")
+                val listener = listenerSupplier()
+                server.pluginManager.registerEvents(listener, this)
+                fancyLog("${listener::class.simpleName} registered successfully.", "INFO")
             } catch (e: Exception) {
                 fancyLog("Failed to register listener: ${e.message}", "ERROR")
             }

@@ -2,7 +2,6 @@ package wtf.amari.prison.pickaxe.events
 
 import de.tr7zw.nbtapi.NBTItem
 import me.tech.mcchestui.utils.openGUI
-import org.bukkit.Bukkit.getLogger
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -27,7 +26,6 @@ class PickaxeListener : Listener {
             }
 
             val nbt = NBTItem(item)
-            getLogger().info("Interacted with item: ${nbt.asNBTString()}")
 
             if (nbt.hasTag("isPrisonPickaxe")) {
                 player.openGUI(createEnchantGUI(player))

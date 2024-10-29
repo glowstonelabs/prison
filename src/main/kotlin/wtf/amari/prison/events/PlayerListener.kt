@@ -21,16 +21,17 @@ class PlayerListener : Listener {
         if (!player.hasPlayedBefore()) {
             scheduler.runTaskLater(instance, Runnable {
                 broadcast(" ".mm())
-                broadcast("<#1db4d5>│ &rWelcome <#1db4d5>${player.name} &fto <#1db4d5>&l&nPrison&r for the very first time!".mm())
+                event.joinMessage(config.getString("messages.firstjoin")?.replace("%player%", player.name)?.mm())
+                broadcast(" ".mm())
             }, 20L)
         } else {
-            config.getString("messages.joinmessage")?.let {
+            config.getString("messages.join")?.let {
                 event.joinMessage(it.replace("%player%", player.name).mm())
             }
         }
 
         scheduler.runTaskLater(instance, Runnable {
-            config.getStringList("messages.welcome-messages").forEach { message ->
+            config.getStringList("messages.welcome-message").forEach { message ->
                 player.sendMessage(message.mm())
             }
         }, 20L)
@@ -39,7 +40,7 @@ class PlayerListener : Listener {
     @EventHandler
     fun onQuit(event: PlayerQuitEvent) {
         val config = Prison.instance.config
-        val quitmessage = config.getString("messages.quitmessage")
+        val quitmessage = config.getString("messages.quit")
         event.quitMessage(
             if (quitmessage.isNullOrEmpty()) null else quitmessage.replace("%player%", event.player.name).mm()
         )

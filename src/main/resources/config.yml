@@ -1,6 +1,7 @@
 messages:
-  joinmessage: "&f[<#1db4d5>+&f] <#1db4d5>%player%"
-  quitmessage: ""
+  join: "&f[<#1db4d5>+&f] <#1db4d5>%player%"
+  quit: ""
+  firstjoin: "<#1db4d5>│ &rWelcome <#1db4d5>%player% &fto <#1db4d5>&l&nPrison&r for the very first time!"
   welcome-messages:
     - " "
     - " &fWelcome to <#1db4d5>&lPrison&r!"

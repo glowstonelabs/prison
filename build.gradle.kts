@@ -66,14 +66,12 @@ tasks {
     }
 
     processResources {
-        val props = mapOf("version" to version)
-        inputs.properties(props)
+        inputs.properties(mapOf("version" to version))
         filteringCharset = "UTF-8"
         filesMatching("plugin.yml") {
-            expand(props)
+            expand(mapOf("version" to version))
         }
     }
-
 
     shadowJar {
         exclude("META-INF/*.SF", "META-INF/*.DSA", "META-INF/*.RSA")
