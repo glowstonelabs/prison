@@ -1,11 +1,9 @@
-name: Build and Release
+name: Build and Test
 
 on:
   push:
-    branches: [ "main" ]
-
-permissions:
-  contents: write  # Allows creating releases and uploading assets
+    branches:
+      - main
 
 jobs:
   build:
@@ -20,36 +18,26 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '21'
+          cache: gradle
+
+      - name: Cache Gradle packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            gradle-${{ runner.os }}-
 
       - name: Grant execute permission for gradlew
-        run: chmod +x gradlew  # Grant execute permission
+        run: chmod +x gradlew
 
       - name: Build with Gradle
-        run: ./gradlew clean shadowJar --no-daemon
+        run: ./gradlew clean build --no-daemon
 
       - name: List build directory
-        run: ls -al build/libs  # Lists files in the build/libs directory
+        run: ls -R build/libs
 
-      - name: Generate Release Tag
-        id: generate_tag
-        run: echo "TAG_NAME=v1.0.0-$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
-
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1.1.4
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ env.TAG_NAME }}
-          release_name: Release ${{ env.TAG_NAME }}
-          draft: false
-          prerelease: false
-
-      - name: Upload JAR to Release
-        if: steps.create_release.outputs.upload_url != ''
-        uses: actions/upload-release-asset@v1
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: build/libs/prison-1.0-all.jar  # Path to your JAR file
-          asset_name: plugin-${{ github.sha }}.jar
-          asset_content_type: application/java-archive
+      - name: Run tests
+        run: ./gradlew test --no-daemon
