@@ -14,6 +14,7 @@ repositories {
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
     maven("https://repo.codemc.io/repository/maven-snapshots/")
     maven("https://repo.codemc.io/repository/maven-public/")
+    maven("https://repo.codemc.io/repository/maven-releases/")
 }
 
 val versions = mapOf(
@@ -27,7 +28,7 @@ val versions = mapOf(
     "placeholderApi" to "2.11.6",
     "kotlinCoroutines" to "1.9.0",
     "boostedyaml" to "1.3.7",
-    "itemnbtapi" to "2.13.2"
+    "itemnbtapi" to "2.13.2",
 )
 
 dependencies {

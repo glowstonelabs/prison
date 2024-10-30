@@ -1,14 +1,32 @@
 package wtf.amari.prison.pickaxe
 
 import de.tr7zw.nbtapi.NBTItem
+import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
+import org.bukkit.plugin.Plugin
 import wtf.amari.prison.Prison
+import wtf.amari.prison.pickaxe.enchantments.Fortune
 import wtf.amari.prison.utils.mm
 
-class PickaxeManager {
+class PickaxeManager(private val plugin: Plugin) {
+
+    init {
+        registerEnchantListeners()
+    }
+
+    fun registerEnchantListeners() {
+        val listeners = listOf(
+            Fortune(this) // Add other listeners as needed
+        )
+
+        listeners.forEach { listener ->
+            Bukkit.getPluginManager().registerEvents(listener, plugin)
+        }
+    }
+
     fun givePickaxe(target: Player) {
         val pickaxe = ItemStack(Material.DIAMOND_PICKAXE)
         val nbt = NBTItem(pickaxe).apply {
@@ -75,5 +93,14 @@ class PickaxeManager {
         } else {
             player.sendMessage("You are not holding a pickaxe.".mm())
         }
+    }
+
+    // Helper functions for enchantment listeners
+    fun isPrisonPickaxe(item: ItemStack): Boolean {
+        return NBTItem(item).getBoolean("isPrisonPickaxe")
+    }
+
+    fun getFortuneLevel(item: ItemStack): Int {
+        return NBTItem(item).getInteger("fortune")
     }
 }
