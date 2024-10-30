@@ -86,6 +86,9 @@ class PickaxeManager(private val plugin: Plugin) {
                         .replace("%tokenfinder%", nbt.getInteger("tokenFinder").toString())
                         .mm()
                 })
+                meta.addEnchant(org.bukkit.enchantments.Enchantment.EFFICIENCY, 100, true)
+                meta.addItemFlags(org.bukkit.inventory.ItemFlag.HIDE_ENCHANTS)
+                meta.isUnbreakable = true
 
                 item.itemMeta = meta
                 player.inventory.setItemInMainHand(item)

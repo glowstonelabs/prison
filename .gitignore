@@ -110,3 +110,6 @@
 /build/kotlin/compileKotlin/cacheable/caches-jvm/jvm/kotlin/constants.tab_i.len
 /build/classes/kotlin/main/wtf/amari/prison/pickaxe/menus/EnchantMenuKt.class
 /build/classes/kotlin/main/wtf/amari/prison/pickaxe/events/PickaxeListener.class
+/build/classes/kotlin/main/wtf/amari/prison/pickaxe/enchantments/Fortune.class
+/build/classes/kotlin/main/wtf/amari/prison/pickaxe/commands/GivePickaxeKt.class
+/build/classes/kotlin/main/wtf/amari/prison/pickaxe/PickaxeManager.class
