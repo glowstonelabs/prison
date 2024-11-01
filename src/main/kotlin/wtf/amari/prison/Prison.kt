@@ -1,5 +1,6 @@
 package wtf.amari.prison
 
+import Database
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import me.honkling.commando.spigot.SpigotCommandManager
@@ -13,6 +14,7 @@ class Prison : JavaPlugin() {
     companion object {
         lateinit var instance: Prison
             private set
+
         private val scope = CoroutineScope(Dispatchers.Default)
     }
 
@@ -33,13 +35,15 @@ class Prison : JavaPlugin() {
     }
 
     override fun onDisable() {
-        fancyLog("Prison plugin has been disabled.", "ERROR")
+        fancyLog("Prison plugin has been disabled.", "INFO")
+        Database.close()
     }
 
     private fun initializePlugin() {
         setupConfig()
         registerCommands()
         registerEvents()
+        Database.initialize(this)
     }
 
     private fun registerCommands() {

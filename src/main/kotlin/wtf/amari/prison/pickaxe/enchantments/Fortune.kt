@@ -19,18 +19,14 @@ class Fortune(private val pickaxeManager: PickaxeManager) : Listener {
         if (pickaxeManager.isPrisonPickaxe(item)) {
             val fortuneLevel = pickaxeManager.getFortuneLevel(item)
 
-            // Base chance for extra drops per fortune level
-            val baseChance = 0.1 // 10% chance per level
+            val baseChance = 0.1
             val totalChance = (baseChance * fortuneLevel).coerceAtMost(1.0) // Cap at 100%
 
-            // Check if extra drops should be added based on the calculated chance
             if (Random.nextDouble() < totalChance) {
-                // Exponential scaling for extra drops
-                val scalingFactor = 0.3 // Adjust this for desired scaling
+                val scalingFactor = 0.3
                 val extraDrops = floor(fortuneLevel.toDouble().pow(scalingFactor)).toInt()
 
-                // Optional: Limit max extra drops to avoid excessive drops
-                val maxExtraDrops = 100 // Adjust this limit as needed
+                val maxExtraDrops = 100
                 val dropsToGenerate = extraDrops.coerceAtMost(maxExtraDrops)
 
                 for (i in 0 until dropsToGenerate) {

@@ -29,6 +29,7 @@ val versions = mapOf(
     "kotlinCoroutines" to "1.9.0",
     "boostedyaml" to "1.3.7",
     "itemnbtapi" to "2.13.2",
+    "sqlite" to "3.42.0.0"
 )
 
 dependencies {
@@ -37,12 +38,12 @@ dependencies {
     compileOnly("de.tr7zw:item-nbt-api-plugin:${versions["itemnbtapi"]}")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${versions["kotlinStdlib"]}")
     implementation("com.github.honkling.commando:spigot:${versions["commando"]}")
-    implementation("org.mongodb:mongodb-driver-kotlin-sync:${versions["mongodbDriver"]}")
     implementation("com.github.DebitCardz:mc-chestui-plus:${versions["mcChestUi"]}")
     implementation("io.github.cdimascio:dotenv-kotlin:${versions["dotenv"]}")
     implementation("net.wesjd:anvilgui:${versions["anvilGui"]}")
     implementation("dev.dejvokep:boosted-yaml:${versions["boostedyaml"]}")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${versions["kotlinCoroutines"]}")
+    implementation("org.xerial:sqlite-jdbc:${versions["sqlite"]}")
 }
 
 val targetJavaVersion = 21
