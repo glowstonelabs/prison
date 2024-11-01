@@ -29,7 +29,7 @@ val versions = mapOf(
     "kotlinCoroutines" to "1.9.0",
     "boostedyaml" to "1.3.7",
     "itemnbtapi" to "2.13.2",
-    "sqlite" to "3.42.0.0"
+    "sqlite" to "3.47.0.0"
 )
 
 dependencies {
