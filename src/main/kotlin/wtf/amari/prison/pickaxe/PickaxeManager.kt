@@ -99,7 +99,10 @@ class PickaxeManager(private val plugin: Plugin) {
     }
 
     // Helper functions for enchantment listeners
-    fun isPrisonPickaxe(item: ItemStack): Boolean {
+    fun isPrisonPickaxe(item: ItemStack?): Boolean {
+        if (item == null || item.type == Material.AIR || item.amount == 0) {
+            return false
+        }
         return NBTItem(item).getBoolean("isPrisonPickaxe")
     }
 

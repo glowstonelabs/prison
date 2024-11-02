@@ -1,16 +1,18 @@
 package wtf.amari.prison
 
-import Database
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import me.honkling.commando.spigot.SpigotCommandManager
+import net.megavex.scoreboardlibrary.api.ScoreboardLibrary
+import net.megavex.scoreboardlibrary.api.exception.NoPacketAdapterAvailableException
+import net.megavex.scoreboardlibrary.api.noop.NoopScoreboardLibrary
 import org.bukkit.plugin.java.JavaPlugin
+import wtf.amari.prison.databases.DatabaseManager
 import wtf.amari.prison.events.PlayerListener
 import wtf.amari.prison.pickaxe.events.PickaxeListener
 import wtf.amari.prison.utils.fancyLog
 
 class Prison : JavaPlugin() {
-
     companion object {
         lateinit var instance: Prison
             private set
@@ -18,8 +20,10 @@ class Prison : JavaPlugin() {
         private val scope = CoroutineScope(Dispatchers.Default)
     }
 
+    var scoreboardLibrary: ScoreboardLibrary? = null
+
     private val commandPackages = listOf(
-        "wtf.amari.prison.commands",
+        "wtf.amari.prison.economy.commands",
         "wtf.amari.prison.pickaxe.commands"
     )
 
@@ -36,14 +40,16 @@ class Prison : JavaPlugin() {
 
     override fun onDisable() {
         fancyLog("Prison plugin has been disabled.", "INFO")
-        Database.close()
+        DatabaseManager.close()
+        scoreboardLibrary?.close()
     }
 
     private fun initializePlugin() {
         setupConfig()
         registerCommands()
         registerEvents()
-        Database.initialize(this)
+        DatabaseManager.initialize(this)
+        initializeScoreboardLibrary()
     }
 
     private fun registerCommands() {
@@ -73,5 +79,14 @@ class Prison : JavaPlugin() {
         saveDefaultConfig()
         reloadConfig()
         fancyLog("Config loaded successfully.", "INFO")
+    }
+
+    private fun initializeScoreboardLibrary() {
+        try {
+            scoreboardLibrary = ScoreboardLibrary.loadScoreboardLibrary(this)
+        } catch (e: NoPacketAdapterAvailableException) {
+            scoreboardLibrary = NoopScoreboardLibrary()
+            fancyLog("No scoreboard packet adapter available!", "ERROR")
+        }
     }
 }

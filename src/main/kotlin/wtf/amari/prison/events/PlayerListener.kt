@@ -7,6 +7,9 @@ import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import wtf.amari.prison.Prison
+import wtf.amari.prison.databases.DatabaseManager
+import wtf.amari.prison.databases.PlayerCurrencyDAO
+import wtf.amari.prison.utils.createSidebarForPlayer
 import wtf.amari.prison.utils.mm
 
 class PlayerListener : Listener {
@@ -17,10 +20,15 @@ class PlayerListener : Listener {
         val scheduler = getScheduler()
         val instance = Prison.instance
         val config = instance.config
+        val dao = PlayerCurrencyDAO(DatabaseManager.getConnection())
+
+        createSidebarForPlayer(player)
+
         config.getString("messages.join")?.let {
             event.joinMessage(it.replace("%player%", player.name).mm())
         }
         if (!player.hasPlayedBefore()) {
+            dao.setInitialBalance(player.uniqueId.toString(), 1000.0)
             scheduler.runTaskLater(instance, Runnable {
                 config.getString("messages.firstjoin")?.let {
                     broadcast("".mm())

@@ -1,24 +1,12 @@
-import org.bukkit.plugin.java.JavaPlugin
-import wtf.amari.prison.utils.fancyLog
-import java.io.File
+package wtf.amari.prison.databases
+
 import java.sql.Connection
-import java.sql.DriverManager
 import java.sql.SQLException
 
-object Database {
-    private var connection: Connection? = null
+class PlayerCurrencyDAO(private val connection: Connection?) {
 
-    fun initialize(plugin: JavaPlugin) {
-        val dbFile = File(plugin.dataFolder, "playerdata.db")
-        val dbUrl = "jdbc:sqlite:${dbFile.absolutePath}"
-
-        try {
-            connection = DriverManager.getConnection(dbUrl)
-            fancyLog("Connected to SQLite database.", "SUCCESS")
-            createTable()
-        } catch (e: SQLException) {
-            e.printStackTrace()
-        }
+    init {
+        createTable()
     }
 
     private fun createTable() {
@@ -34,6 +22,7 @@ object Database {
         try {
             connection?.createStatement()?.use { statement ->
                 statement.execute(createTableSQL)
+                println("Table created or already exists.")
             }
         } catch (e: SQLException) {
             e.printStackTrace()
@@ -56,6 +45,7 @@ object Database {
                 statement.setDouble(3, money)
                 statement.setInt(4, gems)
                 statement.executeUpdate()
+                println("Updated player currency for UUID: $uuid")
             }
         } catch (e: SQLException) {
             e.printStackTrace()
@@ -85,10 +75,38 @@ object Database {
         }
     }
 
-    fun close() {
+    fun getBalance(uuid: String): Double? {
+        val sql = "SELECT money FROM player_currency WHERE uuid = ?"
+        return try {
+            connection?.prepareStatement(sql)?.use { statement ->
+                statement.setString(1, uuid)
+                statement.executeQuery().use { resultSet ->
+                    if (resultSet.next()) {
+                        resultSet.getDouble("money")
+                    } else {
+                        null
+                    }
+                }
+            }
+        } catch (e: SQLException) {
+            e.printStackTrace()
+            null
+        }
+    }
+
+    fun setInitialBalance(uuid: String, initialBalance: Double) {
+        val sql = """
+            INSERT INTO player_currency (uuid, tokens, money, gems) VALUES (?, 0, ?, 0)
+            ON CONFLICT(uuid) DO NOTHING;
+        """.trimIndent()
+
         try {
-            connection?.close()
-            fancyLog("Database connection closed.", "ERROR")
+            connection?.prepareStatement(sql)?.use { statement ->
+                statement.setString(1, uuid)
+                statement.setDouble(2, initialBalance)
+                statement.executeUpdate()
+                println("Set initial balance for UUID: $uuid")
+            }
         } catch (e: SQLException) {
             e.printStackTrace()
         }
