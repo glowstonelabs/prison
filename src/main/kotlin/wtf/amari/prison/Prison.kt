@@ -39,7 +39,7 @@ class Prison : JavaPlugin() {
     }
 
     override fun onDisable() {
-        fancyLog("Prison plugin has been disabled.", "INFO")
+        fancyLog("Prison plugin has been disabled.", "ERROR")
         DatabaseManager.close()
         scoreboardLibrary?.close()
     }

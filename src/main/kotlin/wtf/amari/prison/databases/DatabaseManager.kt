@@ -6,7 +6,6 @@ import java.io.File
 import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.SQLException
-import java.sql.Statement
 
 object DatabaseManager {
     private var connection: Connection? = null
@@ -18,7 +17,7 @@ object DatabaseManager {
         try {
             connection = DriverManager.getConnection(dbUrl)
             fancyLog("Connected to SQLite database.", "SUCCESS")
-            createTable() // Create the table during initialization
+            createTable()
         } catch (e: SQLException) {
             e.printStackTrace()
         }
@@ -34,7 +33,7 @@ object DatabaseManager {
         """.trimIndent()
 
         try {
-            connection?.createStatement()?.use { statement: Statement ->
+            connection?.createStatement()?.use { statement ->
                 statement.execute(createTableSQL)
                 fancyLog("Table created or already exists.", "INFO")
             }
@@ -43,9 +42,7 @@ object DatabaseManager {
         }
     }
 
-    fun getConnection(): Connection? {
-        return connection
-    }
+    fun getConnection(): Connection? = connection
 
     fun close() {
         try {

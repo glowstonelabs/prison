@@ -64,7 +64,6 @@ fun fortuneUpgradeGUI(player: Player, pickaxeManager: PickaxeManager): GUI {
     }
 }
 
-
 // Helper function to check if the item is a prison pickaxe
 private fun isPrisonPickaxe(item: ItemStack): Boolean {
     val nbt = NBTItem(item)

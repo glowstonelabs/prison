@@ -21,7 +21,6 @@ val versions = mapOf(
     "paperApi" to "1.21.1-R0.1-SNAPSHOT",
     "kotlinStdlib" to "2.0.21",
     "commando" to "b0ff9a152d",
-    "mongodbDriver" to "5.2.0",
     "mcChestUi" to "1.5.6",
     "dotenv" to "6.4.2",
     "anvilGui" to "1.10.2-SNAPSHOT",

@@ -8,7 +8,7 @@ import org.bukkit.Bukkit.getConsoleSender
 val mm = MiniMessage.miniMessage()
 
 object Colors {
-    val colors = mapOf(
+    private val colors = mapOf(
         "PRIMARY" to "#3498db",    // Blue
         "SECONDARY" to "#2ecc71",  // Green
         "ERROR" to "#e74c3c",      // Red
@@ -19,9 +19,7 @@ object Colors {
         "SYSTEM" to "#34495e"      // Dark Blue
     )
 
-    fun getColor(name: String): String {
-        return colors[name] ?: "#ffffff" // default to white if not found
-    }
+    fun getColor(name: String): String = colors[name] ?: "#ffffff" // default to white if not found
 }
 
 fun fancyLog(message: String, level: String) {
@@ -29,7 +27,6 @@ fun fancyLog(message: String, level: String) {
     val boxedMessage = message.box(borderColor = color, textColor = color)
     getConsoleSender().sendMessage(boxedMessage)
 }
-
 
 fun String.mm(): Component = mm.deserialize(this.convertLegacyColors())
     .decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE)
@@ -67,8 +64,7 @@ fun String.complexGradient(vararg colors: String): Component {
     return "<gradient:$gradient>${this}</gradient>".mm()
 }
 
-fun String.withEmoji(emoji: String): Component =
-    "${this} $emoji".mm()
+fun String.withEmoji(emoji: String): Component = "${this} $emoji".mm()
 
 fun String.gradientText(vararg colors: String): Component {
     val gradient = colors.joinToString(":")
@@ -80,8 +76,7 @@ fun String.rainbow(): Component = "<rainbow>${this}</rainbow>".mm()
 fun String.prisonTitle(
     primary: String = Colors.getColor("PRIMARY"),
     secondary: String = Colors.getColor("SECONDARY")
-): Component =
-    "<$primary>✦ <$secondary>${this}".mm()
+): Component = "<$primary>✦ <$secondary>${this}".mm()
 
 fun String.withHover(hoverText: String): Component =
     "<hover:show_text:'${hoverText.replace("'", "\\'")}'>${this}</hover>".mm()
@@ -120,14 +115,12 @@ fun String.listItem(bullet: String = "▪", bulletColor: String = "gray", textCo
 fun createStatsLine(
     label: String, value: String,
     labelColor: String = "gray", valueColor: String = "white"
-): Component =
-    "<$labelColor>${label}: <$valueColor>${value}".mm()
+): Component = "<$labelColor>${label}: <$valueColor>${value}".mm()
 
 fun String.fade(
     fromColor: String = Colors.getColor("PRIMARY"),
     toColor: String = Colors.getColor("SECONDARY")
-): Component =
-    "<gradient:${fromColor}:${toColor}>${this}</gradient>".mm()
+): Component = "<gradient:${fromColor}:${toColor}>${this}</gradient>".mm()
 
 fun String.box(
     borderColor: String = Colors.getColor("PRIMARY"),

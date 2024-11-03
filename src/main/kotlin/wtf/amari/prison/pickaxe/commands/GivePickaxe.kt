@@ -15,9 +15,7 @@ import wtf.amari.prison.Prison
 import wtf.amari.prison.pickaxe.PickaxeManager
 import wtf.amari.prison.utils.mm
 
-
 fun givePickaxe(executor: Player, targetName: String?) {
-    // Check if the command executor provided a target player name
     if (targetName == null) {
         executor.sendMessage("&cPlease specify a player.".mm())
         return
@@ -25,7 +23,6 @@ fun givePickaxe(executor: Player, targetName: String?) {
 
     val target = Bukkit.getPlayer(targetName)
     if (target != null) {
-        // Pass the plugin instance to the PickaxeManager constructor
         val pickaxeManager = PickaxeManager(Prison.instance)
         pickaxeManager.givePickaxe(target)
         executor.sendMessage("&aSuccessfully gave a custom pickaxe to ${target.name}.".mm())
@@ -33,4 +30,3 @@ fun givePickaxe(executor: Player, targetName: String?) {
         executor.sendMessage("&cPlayer not found!".mm())
     }
 }
-

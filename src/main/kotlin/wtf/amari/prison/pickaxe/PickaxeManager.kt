@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.Plugin
 import wtf.amari.prison.Prison
 import wtf.amari.prison.pickaxe.enchantments.Fortune
+import wtf.amari.prison.pickaxe.enchantments.JackHammer
 import wtf.amari.prison.utils.mm
 
 class PickaxeManager(private val plugin: Plugin) {
@@ -17,9 +18,10 @@ class PickaxeManager(private val plugin: Plugin) {
         registerEnchantListeners()
     }
 
-    fun registerEnchantListeners() {
+    private fun registerEnchantListeners() {
         val listeners = listOf(
-            Fortune(this) // Add other listeners as needed
+            Fortune(this),
+            JackHammer(this)
         )
 
         listeners.forEach { listener ->

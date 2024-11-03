@@ -47,13 +47,12 @@ fun remove(executor: Player, targetName: String?, amount: Double) {
 }
 
 private fun findPlayer(targetName: String?, executor: Player): Player? {
-    return if (targetName == null) {
+    if (targetName == null) {
         executor.sendMessage("&cYou must specify a player.".mm())
+        return null
+    }
+    return Bukkit.getPlayer(targetName) ?: run {
+        executor.sendMessage("&cPlayer not found.".mm())
         null
-    } else {
-        Bukkit.getPlayer(targetName) ?: run {
-            executor.sendMessage("&cPlayer not found.".mm())
-            null
-        }
     }
 }

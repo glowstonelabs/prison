@@ -18,18 +18,16 @@ class Fortune(private val pickaxeManager: PickaxeManager) : Listener {
 
         if (pickaxeManager.isPrisonPickaxe(item)) {
             val fortuneLevel = pickaxeManager.getFortuneLevel(item)
-
             val baseChance = 0.1
             val totalChance = (baseChance * fortuneLevel).coerceAtMost(1.0) // Cap at 100%
 
             if (Random.nextDouble() < totalChance) {
                 val scalingFactor = 0.3
                 val extraDrops = floor(fortuneLevel.toDouble().pow(scalingFactor)).toInt()
-
                 val maxExtraDrops = 100
                 val dropsToGenerate = extraDrops.coerceAtMost(maxExtraDrops)
 
-                for (i in 0 until dropsToGenerate) {
+                repeat(dropsToGenerate) {
                     event.block.world.dropItemNaturally(event.block.location, event.block.drops.first())
                 }
 

@@ -14,14 +14,14 @@ class PickaxeListener : Listener {
     private val pickaxeManager = PickaxeManager(Prison.instance)
 
     @EventHandler
-    private fun onRightClick(event: PlayerInteractEvent) {
+    fun onRightClick(event: PlayerInteractEvent) {
         if (event.action == Action.RIGHT_CLICK_AIR || event.action == Action.RIGHT_CLICK_BLOCK) {
             val player = event.player
             val item = player.inventory.itemInMainHand
 
             val nbt = NBTItem(item)
 
-            if (nbt.hasTag("isPrisonPickaxe")) {
+            if (nbt.getBoolean("isPrisonPickaxe")) {
                 player.openGUI(createEnchantGUI(player, pickaxeManager))
             }
         }

@@ -25,8 +25,9 @@ class PlayerListener : Listener {
         createSidebarForPlayer(player)
 
         config.getString("messages.join")?.let {
-            event.joinMessage(it.replace("%player%", player.name).mm())
+            event.joinMessage = it.replace("%player%", player.name).mm().toString()
         }
+
         if (!player.hasPlayedBefore()) {
             dao.setInitialBalance(player.uniqueId.toString(), 1000.0)
             scheduler.runTaskLater(instance, Runnable {
@@ -47,9 +48,7 @@ class PlayerListener : Listener {
     @EventHandler
     fun onQuit(event: PlayerQuitEvent) {
         val config = Prison.instance.config
-        val quitmessage = config.getString("messages.quit")
-        event.quitMessage(
-            if (quitmessage.isNullOrEmpty()) null else quitmessage.replace("%player%", event.player.name).mm()
-        )
+        val quitMessage = config.getString("messages.quit")
+        event.quitMessage = quitMessage?.replace("%player%", event.player.name)?.mm().toString()
     }
 }
