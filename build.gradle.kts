@@ -1,6 +1,6 @@
 plugins {
     kotlin("jvm") version "2.1.0-Beta2"
-    id("com.gradleup.shadow") version "8.3.4"
+    id("com.gradleup.shadow") version "8.3.5"
 }
 
 group = "wtf.amari"
