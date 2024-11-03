@@ -56,7 +56,7 @@ class Prison : JavaPlugin() {
         val commandManager = SpigotCommandManager(this)
         try {
             commandPackages.forEach { commandManager.registerCommands(it) }
-            fancyLog("Commands registered successfully.", "INFO")
+            fancyLog("Commands registered successfully.", "SUCCESS")
         } catch (e: Exception) {
             fancyLog("Failed to register commands: ${e.message}", "ERROR")
         }
@@ -67,7 +67,7 @@ class Prison : JavaPlugin() {
             try {
                 val listener = listenerSupplier()
                 server.pluginManager.registerEvents(listener, this)
-                fancyLog("${listener::class.simpleName} registered successfully.", "INFO")
+                fancyLog("${listener::class.simpleName} registered successfully.", "SUCCESS")
             } catch (e: Exception) {
                 fancyLog("Failed to register listener: ${e.message}", "ERROR")
             }
@@ -78,7 +78,7 @@ class Prison : JavaPlugin() {
         dataFolder.mkdirs()
         saveDefaultConfig()
         reloadConfig()
-        fancyLog("Config loaded successfully.", "INFO")
+        fancyLog("Config loaded successfully.", "SUCCESS")
     }
 
     private fun registerPlaceholders() {

@@ -35,7 +35,6 @@ object DatabaseManager {
         try {
             connection?.createStatement()?.use { statement ->
                 statement.execute(createTableSQL)
-                fancyLog("Table created or already exists.", "INFO")
             }
         } catch (e: SQLException) {
             e.printStackTrace()

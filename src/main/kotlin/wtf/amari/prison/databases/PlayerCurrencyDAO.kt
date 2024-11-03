@@ -29,7 +29,6 @@ class PlayerCurrencyDAO(private val connection: Connection?) {
         try {
             connection?.createStatement()?.use { statement ->
                 statement.execute(createTableSQL)
-                println("Table created or already exists.")
             }
         } catch (e: SQLException) {
             e.printStackTrace()
@@ -52,7 +51,6 @@ class PlayerCurrencyDAO(private val connection: Connection?) {
                 statement.setDouble(3, money)
                 statement.setInt(4, gems)
                 statement.executeUpdate()
-                println("Updated player currency for UUID: $uuid")
             }
         } catch (e: SQLException) {
             e.printStackTrace()
@@ -112,7 +110,6 @@ class PlayerCurrencyDAO(private val connection: Connection?) {
                 statement.setString(1, uuid)
                 statement.setDouble(2, initialBalance)
                 statement.executeUpdate()
-                println("Set initial balance for UUID: $uuid")
             }
         } catch (e: SQLException) {
             e.printStackTrace()
