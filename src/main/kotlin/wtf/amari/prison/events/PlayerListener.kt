@@ -25,7 +25,7 @@ class PlayerListener : Listener {
         createSidebarForPlayer(player)
 
         config.getString("messages.join")?.let {
-            event.joinMessage = it.replace("%player%", player.name).mm().toString()
+            event.joinMessage(it.replace("%player%", player.name).mm())
         }
 
         if (!player.hasPlayedBefore()) {
@@ -49,6 +49,8 @@ class PlayerListener : Listener {
     fun onQuit(event: PlayerQuitEvent) {
         val config = Prison.instance.config
         val quitMessage = config.getString("messages.quit")
-        event.quitMessage = quitMessage?.replace("%player%", event.player.name)?.mm().toString()
+        event.quitMessage(
+            if (quitMessage.isNullOrEmpty()) null else quitMessage.replace("%player%", event.player.name).mm()
+        )
     }
 }
