@@ -3,14 +3,13 @@ package wtf.amari.prison
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import me.honkling.commando.spigot.SpigotCommandManager
-import net.megavex.scoreboardlibrary.api.ScoreboardLibrary
-import net.megavex.scoreboardlibrary.api.exception.NoPacketAdapterAvailableException
-import net.megavex.scoreboardlibrary.api.noop.NoopScoreboardLibrary
 import org.bukkit.plugin.java.JavaPlugin
 import wtf.amari.prison.databases.DatabaseManager
 import wtf.amari.prison.events.PlayerListener
 import wtf.amari.prison.pickaxe.events.PickaxeListener
+import wtf.amari.prison.utils.PlaceHolders
 import wtf.amari.prison.utils.fancyLog
+import java.sql.Connection
 
 class Prison : JavaPlugin() {
     companion object {
@@ -20,7 +19,7 @@ class Prison : JavaPlugin() {
         private val scope = CoroutineScope(Dispatchers.Default)
     }
 
-    var scoreboardLibrary: ScoreboardLibrary? = null
+    var databaseConnection: Connection? = null
 
     private val commandPackages = listOf(
         "wtf.amari.prison.economy.commands",
@@ -41,15 +40,15 @@ class Prison : JavaPlugin() {
     override fun onDisable() {
         fancyLog("Prison plugin has been disabled.", "ERROR")
         DatabaseManager.close()
-        scoreboardLibrary?.close()
     }
 
     private fun initializePlugin() {
         setupConfig()
         registerCommands()
         registerEvents()
+        registerPlaceholders()
         DatabaseManager.initialize(this)
-        initializeScoreboardLibrary()
+        databaseConnection = DatabaseManager.getConnection()
     }
 
     private fun registerCommands() {
@@ -81,12 +80,10 @@ class Prison : JavaPlugin() {
         fancyLog("Config loaded successfully.", "INFO")
     }
 
-    private fun initializeScoreboardLibrary() {
-        try {
-            scoreboardLibrary = ScoreboardLibrary.loadScoreboardLibrary(this)
-        } catch (e: NoPacketAdapterAvailableException) {
-            scoreboardLibrary = NoopScoreboardLibrary()
-            fancyLog("No scoreboard packet adapter available!", "ERROR")
+    private fun registerPlaceholders() {
+        server.pluginManager.getPlugin("PlaceholderAPI")?.let {
+            PlaceHolders().register()
+            fancyLog("PlaceholderAPI placeholders registered successfully.", "SUCCESS")
         }
     }
 }

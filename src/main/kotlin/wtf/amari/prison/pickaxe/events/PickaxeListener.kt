@@ -19,10 +19,13 @@ class PickaxeListener : Listener {
             val player = event.player
             val item = player.inventory.itemInMainHand
 
-            val nbt = NBTItem(item)
+            // Check if the item is a pickaxe
+            if (item.type.name.endsWith("_PICKAXE")) {
+                val nbt = NBTItem(item)
 
-            if (nbt.getBoolean("isPrisonPickaxe")) {
-                player.openGUI(createEnchantGUI(player, pickaxeManager))
+                if (nbt.getBoolean("isPrisonPickaxe")) {
+                    player.openGUI(createEnchantGUI(player, pickaxeManager))
+                }
             }
         }
     }

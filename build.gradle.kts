@@ -28,8 +28,7 @@ val versions = mapOf(
     "kotlinCoroutines" to "1.9.0",
     "boostedyaml" to "1.3.7",
     "itemnbtapi" to "2.14.0",
-    "sqlite" to "3.47.0.0",
-    "scoreboardLibraryVersion" to "2.2.1"
+    "sqlite" to "3.47.0.0"
 )
 
 dependencies {
@@ -44,9 +43,6 @@ dependencies {
     implementation("dev.dejvokep:boosted-yaml:${versions["boostedyaml"]}")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${versions["kotlinCoroutines"]}")
     implementation("org.xerial:sqlite-jdbc:${versions["sqlite"]}")
-    implementation("net.megavex:scoreboard-library-api:${versions["scoreboardLibraryVersion"]}")
-    runtimeOnly("net.megavex:scoreboard-library-implementation:${versions["scoreboardLibraryVersion"]}")
-    runtimeOnly("net.megavex:scoreboard-library-modern:${versions["scoreboardLibraryVersion"]}")
 }
 
 val targetJavaVersion = 21

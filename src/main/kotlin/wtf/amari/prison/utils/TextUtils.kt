@@ -143,7 +143,7 @@ private fun String.center(width: Int): String {
     return " ".repeat(padding) + this + " ".repeat(width - this.length - padding)
 }
 
-fun Number.format(): String = String.format("%,d", this)
+fun Number.format(): String = String.format("%,.2f", this.toDouble())
 
 fun Number.shorthand(): String {
     val number = this.toLong()

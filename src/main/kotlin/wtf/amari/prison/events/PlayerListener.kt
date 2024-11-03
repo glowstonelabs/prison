@@ -9,7 +9,6 @@ import org.bukkit.event.player.PlayerQuitEvent
 import wtf.amari.prison.Prison
 import wtf.amari.prison.databases.DatabaseManager
 import wtf.amari.prison.databases.PlayerCurrencyDAO
-import wtf.amari.prison.utils.createSidebarForPlayer
 import wtf.amari.prison.utils.mm
 
 class PlayerListener : Listener {
@@ -22,7 +21,6 @@ class PlayerListener : Listener {
         val config = instance.config
         val dao = PlayerCurrencyDAO(DatabaseManager.getConnection())
 
-        createSidebarForPlayer(player)
 
         config.getString("messages.join")?.let {
             event.joinMessage(it.replace("%player%", player.name).mm())

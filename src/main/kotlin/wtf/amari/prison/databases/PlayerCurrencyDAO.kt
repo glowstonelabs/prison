@@ -5,8 +5,15 @@ import java.sql.SQLException
 
 class PlayerCurrencyDAO(private val connection: Connection?) {
 
+    companion object {
+        private var isTableCreated = false
+    }
+
     init {
-        createTable()
+        if (!isTableCreated) {
+            createTable()
+            isTableCreated = true
+        }
     }
 
     private fun createTable() {
@@ -75,7 +82,7 @@ class PlayerCurrencyDAO(private val connection: Connection?) {
         }
     }
 
-    fun getBalance(uuid: String): Double? {
+    fun getBalance(uuid: String): Double {
         val sql = "SELECT money FROM player_currency WHERE uuid = ?"
         return try {
             connection?.prepareStatement(sql)?.use { statement ->
@@ -84,13 +91,13 @@ class PlayerCurrencyDAO(private val connection: Connection?) {
                     if (resultSet.next()) {
                         resultSet.getDouble("money")
                     } else {
-                        null
+                        0.0
                     }
                 }
-            }
+            } ?: 0.0
         } catch (e: SQLException) {
             e.printStackTrace()
-            null
+            0.0
         }
     }
 
