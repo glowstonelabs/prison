@@ -23,7 +23,8 @@ class Prison : JavaPlugin() {
 
     private val commandPackages = listOf(
         "wtf.amari.prison.economy.commands",
-        "wtf.amari.prison.pickaxe.commands"
+        "wtf.amari.prison.pickaxe.commands",
+        "wtf.amari.prison.commands"
     )
 
     private val listeners = listOf(
