@@ -2,8 +2,8 @@
     "gems",
     description = "Shows the player's gems.",
     usage = "Invalid usage. /gems, /gems <player>",
-    permission = "zela.gems",
-    permissionMessage = "You need zela.gems to do that!"
+    permission = "prison.gems",
+    permissionMessage = "You need prison.gems to do that!"
 )
 
 package wtf.amari.prison.economy.commands.gems

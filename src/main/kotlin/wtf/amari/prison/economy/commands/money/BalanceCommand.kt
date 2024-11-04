@@ -2,8 +2,8 @@
     "balance",
     description = "Shows the player's balance.",
     usage = "Invalid usage. /balance, /balance <player>",
-    permission = "zela.balance",
-    permissionMessage = "You need zela.balance to do that!"
+    permission = "prison.balance",
+    permissionMessage = "You need prison.balance to do that!"
 )
 
 package wtf.amari.prison.economy.commands.money

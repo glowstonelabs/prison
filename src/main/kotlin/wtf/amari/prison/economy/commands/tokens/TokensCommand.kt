@@ -2,8 +2,8 @@
     "tokens",
     description = "Shows the player's tokens.",
     usage = "Invalid usage. /tokens, /tokens <player>",
-    permission = "zela.tokens",
-    permissionMessage = "You need zela.tokens to do that!"
+    permission = "prison.tokens",
+    permissionMessage = "You need prison.tokens to do that!"
 )
 
 package wtf.amari.prison.economy.commands.tokens
