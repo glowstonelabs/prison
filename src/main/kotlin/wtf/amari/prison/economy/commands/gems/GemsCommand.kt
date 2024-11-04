@@ -35,10 +35,6 @@ fun gems(executor: Player) {
  */
 fun gems(executor: Player, targetName: String?) {
     val target = targetName?.let { Bukkit.getPlayer(it) } ?: executor
-    if (target == null) {
-        executor.sendMessage("&cPlayer not found.".mm())
-        return
-    }
     val dao = PlayerCurrencyDAO(DatabaseManager.getConnection())
     val playerCurrency = dao.getPlayerCurrency(target.uniqueId.toString())
     val gems = playerCurrency?.get("gems") as? Int ?: 0
