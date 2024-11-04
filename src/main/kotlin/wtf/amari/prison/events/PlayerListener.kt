@@ -21,11 +21,12 @@ class PlayerListener : Listener {
         val config = instance.config
         val dao = PlayerCurrencyDAO(DatabaseManager.getConnection())
 
-
+        // Send join message
         config.getString("messages.join")?.let {
             event.joinMessage(it.replace("%player%", player.name).mm())
         }
 
+        // Handle first-time player join
         if (!player.hasPlayedBefore()) {
             dao.setInitialBalance(player.uniqueId.toString(), 1000, 1000)
             scheduler.runTaskLater(instance, Runnable {
@@ -36,6 +37,7 @@ class PlayerListener : Listener {
             }, 20L)
         }
 
+        // Send welcome messages
         scheduler.runTaskLater(instance, Runnable {
             config.getStringList("messages.welcome-messages").forEach { message ->
                 player.sendMessage(message.mm())
