@@ -16,12 +16,15 @@ class PlayerCurrencyDAO(private val connection: Connection?) {
         }
     }
 
+    /**
+     * Creates the player_currency table if it does not already exist.
+     */
     private fun createTable() {
         val createTableSQL = """
             CREATE TABLE IF NOT EXISTS player_currency (
                 uuid TEXT PRIMARY KEY,
                 tokens INTEGER DEFAULT 0,
-                money INTEGER DEFAULT 0.0,
+                money INTEGER DEFAULT 0,
                 gems INTEGER DEFAULT 0
             );
         """.trimIndent()
@@ -35,6 +38,13 @@ class PlayerCurrencyDAO(private val connection: Connection?) {
         }
     }
 
+    /**
+     * Updates the player's currency values in the database.
+     * @param uuid The player's unique identifier.
+     * @param tokens The new token value, or null to leave unchanged.
+     * @param money The new money value, or null to leave unchanged.
+     * @param gems The new gems value, or null to leave unchanged.
+     */
     fun updatePlayerCurrency(uuid: String, tokens: Int? = null, money: Int? = null, gems: Int? = null) {
         val sql = """
             UPDATE player_currency
@@ -57,6 +67,11 @@ class PlayerCurrencyDAO(private val connection: Connection?) {
         }
     }
 
+    /**
+     * Retrieves the player's currency values from the database.
+     * @param uuid The player's unique identifier.
+     * @return A map containing the currency values, or null if the player does not exist.
+     */
     fun getPlayerCurrency(uuid: String): Map<String, Any>? {
         val sql = "SELECT tokens, money, gems FROM player_currency WHERE uuid = ?"
         return try {
@@ -80,11 +95,17 @@ class PlayerCurrencyDAO(private val connection: Connection?) {
         }
     }
 
+    /**
+     * Sets the initial balance for a new player.
+     * @param uuid The player's unique identifier.
+     * @param initialTokens The initial token value.
+     * @param initialMoney The initial money value.
+     */
     fun setInitialBalance(uuid: String, initialTokens: Int, initialMoney: Int) {
         val sql = """
-        INSERT INTO player_currency (uuid, tokens, money, gems) VALUES (?, ?, ?, 0)
-        ON CONFLICT(uuid) DO NOTHING;
-    """.trimIndent()
+            INSERT INTO player_currency (uuid, tokens, money, gems) VALUES (?, ?, ?, 0)
+            ON CONFLICT(uuid) DO NOTHING;
+        """.trimIndent()
 
         try {
             connection?.prepareStatement(sql)?.use { statement ->
