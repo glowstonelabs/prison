@@ -43,6 +43,9 @@ class Prison : JavaPlugin() {
         DatabaseManager.close()
     }
 
+    /**
+     * Initializes the plugin by setting up configuration, commands, events, placeholders, and database connection.
+     */
     private fun initializePlugin() {
         setupConfig()
         registerCommands()
@@ -52,6 +55,9 @@ class Prison : JavaPlugin() {
         databaseConnection = DatabaseManager.getConnection()
     }
 
+    /**
+     * Registers commands using the SpigotCommandManager.
+     */
     private fun registerCommands() {
         val commandManager = SpigotCommandManager(this)
         try {
@@ -62,6 +68,9 @@ class Prison : JavaPlugin() {
         }
     }
 
+    /**
+     * Registers event listeners.
+     */
     private fun registerEvents() {
         listeners.forEach { listenerSupplier ->
             try {
@@ -74,6 +83,9 @@ class Prison : JavaPlugin() {
         }
     }
 
+    /**
+     * Sets up the plugin configuration.
+     */
     private fun setupConfig() {
         dataFolder.mkdirs()
         saveDefaultConfig()
@@ -81,6 +93,9 @@ class Prison : JavaPlugin() {
         fancyLog("Config loaded successfully.", "SUCCESS")
     }
 
+    /**
+     * Registers PlaceholderAPI placeholders if the plugin is available.
+     */
     private fun registerPlaceholders() {
         server.pluginManager.getPlugin("PlaceholderAPI")?.let {
             PlaceHolders().register()

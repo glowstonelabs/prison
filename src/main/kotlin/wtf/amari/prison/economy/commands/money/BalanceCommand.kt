@@ -16,23 +16,33 @@ import wtf.amari.prison.databases.PlayerCurrencyDAO
 import wtf.amari.prison.utils.mm
 import wtf.amari.prison.utils.shorthand
 
+/**
+ * Retrieves and displays the balance of the executor.
+ *
+ * @param executor The player executing the command.
+ */
 fun balance(executor: Player) {
     val dao = PlayerCurrencyDAO(DatabaseManager.getConnection())
-    val playerCurrency = dao.getPlayerCurrency(executor.uniqueId.toString())
-    val money = playerCurrency?.get("money") as? Int ?: 0
+    val money = dao.getPlayerCurrency(executor.uniqueId.toString())?.get("money") as? Int ?: 0
 
     executor.sendMessage("&f${executor.name}'s &abalance is ${money.shorthand()}".mm())
 }
 
+/**
+ * Retrieves and displays the balance of the specified player or the executor if no player is specified.
+ *
+ * @param executor The player executing the command.
+ * @param targetName The name of the target player.
+ */
 fun balance(executor: Player, targetName: String?) {
     val target = targetName?.let { Bukkit.getPlayer(it) } ?: executor
     if (target == null) {
         executor.sendMessage("&cPlayer not found.".mm())
         return
     }
+
     val dao = PlayerCurrencyDAO(DatabaseManager.getConnection())
-    val playerCurrency = dao.getPlayerCurrency(target.uniqueId.toString())
-    val money = playerCurrency?.get("money") as? Int ?: 0
+    val money = dao.getPlayerCurrency(target.uniqueId.toString())?.get("money") as? Int ?: 0
 
     executor.sendMessage("&c${target.name}'s &abalance is ${money.shorthand()}".mm())
 }

@@ -15,8 +15,14 @@ import wtf.amari.prison.Prison
 import wtf.amari.prison.pickaxe.PickaxeManager
 import wtf.amari.prison.utils.mm
 
+/**
+ * Gives a custom prison pickaxe to the specified player.
+ *
+ * @param executor The player executing the command.
+ * @param targetName The name of the target player.
+ */
 fun givePickaxe(executor: Player, targetName: String?) {
-    if (targetName == null) {
+    if (targetName.isNullOrBlank()) {
         executor.sendMessage("&cPlease specify a player.".mm())
         return
     }

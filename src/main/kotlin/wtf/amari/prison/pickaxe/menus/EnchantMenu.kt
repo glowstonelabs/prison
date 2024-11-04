@@ -13,13 +13,19 @@ import wtf.amari.prison.Prison
 import wtf.amari.prison.pickaxe.PickaxeManager
 import wtf.amari.prison.utils.mm
 
+/**
+ * Creates the main enchantment GUI for the player.
+ */
 fun createEnchantGUI(player: Player, pickaxeManager: PickaxeManager): GUI {
     return gui(
         plugin = Prison.instance,
         title = "<#36393F>&lEnchants".mm(),
         type = GUIType.Chest(rows = 3)
     ) {
+        // Fill all slots with black stained glass pane
         all { item = item(Material.BLACK_STAINED_GLASS_PANE) { name = " ".mm() } }
+
+        // Slot for Fortune enchantment
         slot(14, 1) {
             item = item(Material.BELL) {
                 name = "<#7289DA>&lFortune".mm()
@@ -34,13 +40,19 @@ fun createEnchantGUI(player: Player, pickaxeManager: PickaxeManager): GUI {
     }
 }
 
+/**
+ * Creates the Fortune upgrade GUI for the player.
+ */
 fun fortuneUpgradeGUI(player: Player, pickaxeManager: PickaxeManager): GUI {
     return gui(
         plugin = Prison.instance,
         title = "<#36393F>&lUpgrade".mm(),
         type = GUIType.Chest(rows = 3)
     ) {
+        // Fill all slots with black stained glass pane
         all { item = item(Material.BLACK_STAINED_GLASS_PANE) { name = " ".mm() } }
+
+        // Slot for upgrading Fortune level
         slot(14, 1) {
             item = item(Material.BELL) {
                 name = "<#7289DA>&l1 Level".mm()
@@ -64,7 +76,9 @@ fun fortuneUpgradeGUI(player: Player, pickaxeManager: PickaxeManager): GUI {
     }
 }
 
-// Helper function to check if the item is a prison pickaxe
+/**
+ * Helper function to check if the item is a prison pickaxe.
+ */
 private fun isPrisonPickaxe(item: ItemStack): Boolean {
     val nbt = NBTItem(item)
     return nbt.getBoolean("isPrisonPickaxe")

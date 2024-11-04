@@ -13,28 +13,15 @@ class PlaceHolders : PlaceholderExpansion() {
 
     override fun onPlaceholderRequest(player: Player?, identifier: String): String {
         if (player == null) return ""
+
+        // Use a single DAO instance to avoid multiple database connections
+        val dao = PlayerCurrencyDAO(DatabaseManager.getConnection())
+        val playerCurrency = dao.getPlayerCurrency(player.uniqueId.toString()) ?: return "0"
+
         return when (identifier) {
-            "balance" -> {
-                val dao = PlayerCurrencyDAO(DatabaseManager.getConnection())
-                val playerCurrency = dao.getPlayerCurrency(player.uniqueId.toString())
-                val balance = playerCurrency?.get("money") as? Int ?: 0
-                balance.shorthand()
-            }
-
-            "tokens" -> {
-                val dao = PlayerCurrencyDAO(DatabaseManager.getConnection())
-                val playerCurrency = dao.getPlayerCurrency(player.uniqueId.toString())
-                val balance = playerCurrency?.get("tokens") as? Int ?: 0
-                balance.shorthand()
-            }
-
-            "gems" -> {
-                val dao = PlayerCurrencyDAO(DatabaseManager.getConnection())
-                val playerCurrency = dao.getPlayerCurrency(player.uniqueId.toString())
-                val balance = playerCurrency?.get("gems") as? Int ?: 0
-                balance.shorthand()
-            }
-
+            "balance" -> (playerCurrency.getOrDefault("money", 0) as Number).shorthand()
+            "tokens" -> (playerCurrency.getOrDefault("tokens", 0) as Number).shorthand()
+            "gems" -> (playerCurrency.getOrDefault("gems", 0) as Number).shorthand()
             else -> ""
         }
     }

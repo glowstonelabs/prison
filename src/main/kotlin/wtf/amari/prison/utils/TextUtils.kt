@@ -22,17 +22,29 @@ object Colors {
     fun getColor(name: String): String = colors[name] ?: "#ffffff" // default to white if not found
 }
 
+/**
+ * Logs a message to the console with a specific color based on the level.
+ */
 fun fancyLog(message: String, level: String) {
     val color = Colors.getColor(level)
     val boxedMessage = message.box(borderColor = color, textColor = color)
     getConsoleSender().sendMessage(boxedMessage)
 }
 
+/**
+ * Converts a string with legacy color codes to a MiniMessage component.
+ */
 fun String.mm(): Component = mm.deserialize(this.convertLegacyColors())
     .decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE)
 
+/**
+ * Applies a gradient effect to the string.
+ */
 fun String.mainGradient(): Component = "<gradient:#b8ecff:#77daff>${this}</gradient>".mm()
 
+/**
+ * Converts legacy color codes to MiniMessage format.
+ */
 fun String.convertLegacyColors(): String = this
     .replace("&0", "&r<black>").replace("&1", "&r<dark_blue>")
     .replace("&2", "&r<dark_green>").replace("&3", "&r<dark_aqua>")
@@ -46,6 +58,9 @@ fun String.convertLegacyColors(): String = this
     .replace("&m", "<st>").replace("&n", "<u>")
     .replace("&o", "<i>").replace("&r", "<reset>")
 
+/**
+ * Converts legacy color codes to the new format.
+ */
 fun String.convertNewColors(): String = this
     .replace("&0", "§0").replace("&1", "§1")
     .replace("&2", "§2").replace("&3", "§3")
@@ -59,37 +74,67 @@ fun String.convertNewColors(): String = this
     .replace("&m", "§m").replace("&n", "§n")
     .replace("&o", "§o").replace("&r", "§r")
 
+/**
+ * Applies a complex gradient effect to the string.
+ */
 fun String.complexGradient(vararg colors: String): Component {
     val gradient = colors.joinToString(":")
     return "<gradient:$gradient>${this}</gradient>".mm()
 }
 
+/**
+ * Adds an emoji to the string.
+ */
 fun String.withEmoji(emoji: String): Component = "${this} $emoji".mm()
 
+/**
+ * Applies a gradient effect to the string.
+ */
 fun String.gradientText(vararg colors: String): Component {
     val gradient = colors.joinToString(":")
     return "<gradient:$gradient>${this}</gradient>".mm()
 }
 
+/**
+ * Applies a rainbow effect to the string.
+ */
 fun String.rainbow(): Component = "<rainbow>${this}</rainbow>".mm()
 
+/**
+ * Formats the string as a prison title.
+ */
 fun String.prisonTitle(
     primary: String = Colors.getColor("PRIMARY"),
     secondary: String = Colors.getColor("SECONDARY")
 ): Component = "<$primary>✦ <$secondary>${this}".mm()
 
+/**
+ * Adds hover text to the string.
+ */
 fun String.withHover(hoverText: String): Component =
     "<hover:show_text:'${hoverText.replace("'", "\\'")}'>${this}</hover>".mm()
 
+/**
+ * Adds a command to the string.
+ */
 fun String.withCommand(command: String): Component =
     "<click:run_command:'${command.replace("'", "\\'")}'>${this}</click>".mm()
 
+/**
+ * Adds a suggestion command to the string.
+ */
 fun String.withSuggest(suggestion: String): Component =
     "<click:suggest_command:'${suggestion.replace("'", "\\'")}'>${this}</click>".mm()
 
+/**
+ * Adds a URL to the string.
+ */
 fun String.withUrl(url: String): Component =
     "<click:open_url:'${url.replace("'", "\\'")}'>${this}</click>".mm()
 
+/**
+ * Creates a progress bar component.
+ */
 fun createProgressBar(
     current: Int, max: Int, length: Int = 10,
     filledSymbol: String = "■", emptySymbol: String = "□",
@@ -109,19 +154,31 @@ object Prefix {
     val SYSTEM = "<${Colors.getColor("SYSTEM")}>✦ ".mm()
 }
 
+/**
+ * Formats the string as a list item.
+ */
 fun String.listItem(bullet: String = "▪", bulletColor: String = "gray", textColor: String = "white"): Component =
     "<$bulletColor>${bullet} <$textColor>${this}".mm()
 
+/**
+ * Creates a stats line component.
+ */
 fun createStatsLine(
     label: String, value: String,
     labelColor: String = "gray", valueColor: String = "white"
 ): Component = "<$labelColor>${label}: <$valueColor>${value}".mm()
 
+/**
+ * Applies a fade effect to the string.
+ */
 fun String.fade(
     fromColor: String = Colors.getColor("PRIMARY"),
     toColor: String = Colors.getColor("SECONDARY")
 ): Component = "<gradient:${fromColor}:${toColor}>${this}</gradient>".mm()
 
+/**
+ * Formats the string as a boxed message.
+ */
 fun String.box(
     borderColor: String = Colors.getColor("PRIMARY"),
     textColor: String = "white",
@@ -137,14 +194,23 @@ $newLine<$borderColor>┌$topBottomBorder┐
     """.trimIndent().mm()
 }
 
+/**
+ * Centers the string within a given width.
+ */
 private fun String.center(width: Int): String {
     if (this.length >= width) return this
     val padding = (width - this.length) / 2
     return " ".repeat(padding) + this + " ".repeat(width - this.length - padding)
 }
 
+/**
+ * Formats a number with commas and two decimal places.
+ */
 fun Number.format(): String = String.format("%,.2f", this.toDouble())
 
+/**
+ * Converts a number to a shorthand format (e.g., 1.5K, 2.3M).
+ */
 fun Number.shorthand(): String {
     val number = this.toLong()
     return when {
@@ -156,7 +222,13 @@ fun Number.shorthand(): String {
     }
 }
 
+/**
+ * Creates a line component with a specified color and symbol.
+ */
 fun createLine(color: String = Colors.getColor("PRIMARY"), symbol: String = "▬"): Component =
     "<$color>${symbol.repeat(40)}".mm()
 
+/**
+ * Formats a double as a money string.
+ */
 fun Double.money(): String = String.format("$%,.2f", this)

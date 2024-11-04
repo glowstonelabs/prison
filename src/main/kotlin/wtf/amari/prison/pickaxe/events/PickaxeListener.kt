@@ -9,23 +9,28 @@ import org.bukkit.event.player.PlayerInteractEvent
 import wtf.amari.prison.Prison
 import wtf.amari.prison.pickaxe.PickaxeManager
 import wtf.amari.prison.pickaxe.menus.createEnchantGUI
+import wtf.amari.prison.utils.mm
 
 class PickaxeListener : Listener {
     private val pickaxeManager = PickaxeManager(Prison.instance)
 
     @EventHandler
     fun onRightClick(event: PlayerInteractEvent) {
-        if (event.action == Action.RIGHT_CLICK_AIR || event.action == Action.RIGHT_CLICK_BLOCK) {
-            val player = event.player
-            val item = player.inventory.itemInMainHand
+        val player = event.player
+        val item = player.inventory.itemInMainHand
 
-            // Check if the item is a pickaxe
-            if (item.type.name.endsWith("_PICKAXE")) {
-                val nbt = NBTItem(item)
+        // Check if the action is a right-click and the item is a pickaxe
+        if ((event.action == Action.RIGHT_CLICK_AIR || event.action == Action.RIGHT_CLICK_BLOCK) && item.type.name.endsWith(
+                "_PICKAXE"
+            )
+        ) {
+            val nbt = NBTItem(item)
 
-                if (nbt.getBoolean("isPrisonPickaxe")) {
-                    player.openGUI(createEnchantGUI(player, pickaxeManager))
-                }
+            // Check if the pickaxe is a custom prison pickaxe
+            if (nbt.getBoolean("isPrisonPickaxe")) {
+                player.openGUI(createEnchantGUI(player, pickaxeManager))
+            } else {
+                player.sendMessage("This is not a custom prison pickaxe.".mm())
             }
         }
     }
