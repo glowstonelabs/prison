@@ -30,12 +30,15 @@ class AutoAnnouncements {
     private fun startAnnouncements() {
         object : BukkitRunnable() {
             override fun run() {
-                // Select a random category and its corresponding messages
-                val randomCategory = announcements.keys.randomOrNull()
-                val randomAnnouncement = randomCategory?.let { announcements[it]?.joinToString("\n") }
+                // Check if there are any players online
+                if (Bukkit.getOnlinePlayers().isNotEmpty()) {
+                    // Select a random category and its corresponding messages
+                    val randomCategory = announcements.keys.randomOrNull()
+                    val randomAnnouncement = randomCategory?.let { announcements[it]?.joinToString("\n") }
 
-                // Broadcast the announcement if it exists
-                randomAnnouncement?.let { Bukkit.broadcast(it.mm()) }
+                    // Broadcast the announcement if it exists
+                    randomAnnouncement?.let { Bukkit.broadcast(it.mm()) }
+                }
             }
         }.runTaskTimer(Prison.instance, 0L, 6000L) // 6000L ticks = 5 minutes
     }
