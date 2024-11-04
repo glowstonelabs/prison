@@ -14,16 +14,34 @@ import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import wtf.amari.prison.utils.mm
 
-fun clear(executor: Player) {
-    executor.inventory.clear()
-    executor.sendMessage("&aYou have cleared your inventory".mm())
-}
+/**
+ * Clears the inventory of the executor or the specified target player.
+ */
+object ClearInventory {
 
-fun clear(executor: Player, targetName: String?) {
-    val target = targetName?.let { Bukkit.getPlayer(it) } ?: run {
-        executor.sendMessage("&cPlayer not found.".mm())
-        return
+    /**
+     * Clears the executor's inventory and sends a confirmation message.
+     *
+     * @param executor The player executing the command.
+     */
+    fun clear(executor: Player) {
+        executor.inventory.clear()
+        executor.sendMessage("&aYou have cleared your inventory.".mm())
     }
-    target.inventory.clear()
-    executor.sendMessage("&aCleared &c${target.name}'s &aInventory".mm())
+
+    /**
+     * Clears the inventory of the specified target player and sends confirmation messages.
+     *
+     * @param executor The player executing the command.
+     * @param targetName The name of the target player whose inventory is to be cleared.
+     */
+    fun clear(executor: Player, targetName: String?) {
+        val target = targetName?.let { Bukkit.getPlayer(it) }
+        if (target == null) {
+            executor.sendMessage("&cPlayer not found.".mm())
+            return
+        }
+        target.inventory.clear()
+        executor.sendMessage("&aCleared &c${target.name}'s &ainventory.".mm())
+    }
 }
