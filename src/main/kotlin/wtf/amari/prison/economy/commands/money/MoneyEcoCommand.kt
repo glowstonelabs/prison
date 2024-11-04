@@ -16,6 +16,12 @@ import wtf.amari.prison.databases.PlayerCurrencyDAO
 import wtf.amari.prison.utils.mm
 import wtf.amari.prison.utils.shorthand
 
+/**
+ * Sets the player's balance to a specified amount.
+ * @param executor The player executing the command.
+ * @param targetName The target player's name.
+ * @param amountStr The amount to set.
+ */
 fun set(executor: Player, targetName: String?, amountStr: String) {
     val amount = amountStr.toIntOrNull()
     if (amount == null) {
@@ -29,6 +35,12 @@ fun set(executor: Player, targetName: String?, amountStr: String) {
     }
 }
 
+/**
+ * Adds a specified amount to the player's balance.
+ * @param executor The player executing the command.
+ * @param targetName The target player's name.
+ * @param amountStr The amount to add.
+ */
 fun add(executor: Player, targetName: String?, amountStr: String) {
     val amount = amountStr.toIntOrNull()
     if (amount == null) {
@@ -37,13 +49,18 @@ fun add(executor: Player, targetName: String?, amountStr: String) {
     }
     val dao = PlayerCurrencyDAO(DatabaseManager.getConnection())
     findPlayer(targetName, executor)?.let {
-        val playerCurrency = dao.getPlayerCurrency(it.uniqueId.toString())
-        val currentBalance = playerCurrency?.get("money") as? Int ?: 0
+        val currentBalance = dao.getPlayerCurrency(it.uniqueId.toString())?.get("money") as? Int ?: 0
         dao.updatePlayerCurrency(it.uniqueId.toString(), null, currentBalance + amount, null)
         executor.sendMessage("&aAdded ${amount.shorthand()} &ato &c${it.name}'s &abalance".mm())
     }
 }
 
+/**
+ * Removes a specified amount from the player's balance.
+ * @param executor The player executing the command.
+ * @param targetName The target player's name.
+ * @param amountStr The amount to remove.
+ */
 fun remove(executor: Player, targetName: String?, amountStr: String) {
     val amount = amountStr.toIntOrNull()
     if (amount == null) {
@@ -52,8 +69,7 @@ fun remove(executor: Player, targetName: String?, amountStr: String) {
     }
     val dao = PlayerCurrencyDAO(DatabaseManager.getConnection())
     findPlayer(targetName, executor)?.let {
-        val playerCurrency = dao.getPlayerCurrency(it.uniqueId.toString())
-        val currentBalance = playerCurrency?.get("money") as? Int ?: 0
+        val currentBalance = dao.getPlayerCurrency(it.uniqueId.toString())?.get("money") as? Int ?: 0
         if (currentBalance < amount) {
             executor.sendMessage("&cCannot remove &a${amount.shorthand()} &cfrom &c${it.name}'s &cbalance. Insufficient funds.".mm())
         } else {
@@ -63,6 +79,12 @@ fun remove(executor: Player, targetName: String?, amountStr: String) {
     }
 }
 
+/**
+ * Finds a player by their name.
+ * @param targetName The target player's name.
+ * @param executor The player executing the command.
+ * @return The Player object if found, null otherwise.
+ */
 private fun findPlayer(targetName: String?, executor: Player): Player? {
     if (targetName == null) {
         executor.sendMessage("&cYou must specify a player.".mm())
