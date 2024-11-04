@@ -13,32 +13,29 @@ import wtf.amari.prison.utils.mm
 
 class PlayerListener : Listener {
 
-    private val instance = Prison.instance
-    private val config = instance.config
-    private val dao = PlayerCurrencyDAO(DatabaseManager.getConnection())
-
     @EventHandler
     fun onJoin(event: PlayerJoinEvent) {
         val player = event.player
         val scheduler = getScheduler()
+        val instance = Prison.instance
+        val config = instance.config
+        val dao = PlayerCurrencyDAO(DatabaseManager.getConnection())
 
-        // Set join message
+
         config.getString("messages.join")?.let {
             event.joinMessage(it.replace("%player%", player.name).mm())
         }
 
-        // Handle first-time player join
         if (!player.hasPlayedBefore()) {
             dao.setInitialBalance(player.uniqueId.toString(), 1000, 1000)
             scheduler.runTaskLater(instance, Runnable {
-                config.getString("messages.firstjoin")?.let { message ->
+                config.getString("messages.firstjoin")?.let {
                     broadcast("".mm())
-                    broadcast(message.replace("%player%", player.name).mm())
+                    broadcast(it.replace("%player%", player.name).mm())
                 }
             }, 20L)
         }
 
-        // Send welcome messages
         scheduler.runTaskLater(instance, Runnable {
             config.getStringList("messages.welcome-messages").forEach { message ->
                 player.sendMessage(message.mm())
@@ -48,6 +45,7 @@ class PlayerListener : Listener {
 
     @EventHandler
     fun onQuit(event: PlayerQuitEvent) {
+        val config = Prison.instance.config
         val quitMessage = config.getString("messages.quit")
         event.quitMessage(
             if (quitMessage.isNullOrEmpty()) null else quitMessage.replace("%player%", event.player.name).mm()
