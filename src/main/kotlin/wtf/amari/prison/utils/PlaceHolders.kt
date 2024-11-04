@@ -16,8 +16,23 @@ class PlaceHolders : PlaceholderExpansion() {
         return when (identifier) {
             "balance" -> {
                 val dao = PlayerCurrencyDAO(DatabaseManager.getConnection())
-                val balance = dao.getBalance(player.uniqueId.toString())
-                balance.shorthand() ?: ""
+                val playerCurrency = dao.getPlayerCurrency(player.uniqueId.toString())
+                val balance = playerCurrency?.get("money") as? Int ?: 0
+                balance.shorthand()
+            }
+
+            "tokens" -> {
+                val dao = PlayerCurrencyDAO(DatabaseManager.getConnection())
+                val playerCurrency = dao.getPlayerCurrency(player.uniqueId.toString())
+                val balance = playerCurrency?.get("tokens") as? Int ?: 0
+                balance.shorthand()
+            }
+
+            "gems" -> {
+                val dao = PlayerCurrencyDAO(DatabaseManager.getConnection())
+                val playerCurrency = dao.getPlayerCurrency(player.uniqueId.toString())
+                val balance = playerCurrency?.get("gems") as? Int ?: 0
+                balance.shorthand()
             }
 
             else -> ""

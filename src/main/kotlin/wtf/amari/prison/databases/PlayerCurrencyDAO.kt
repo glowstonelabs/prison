@@ -21,7 +21,7 @@ class PlayerCurrencyDAO(private val connection: Connection?) {
             CREATE TABLE IF NOT EXISTS player_currency (
                 uuid TEXT PRIMARY KEY,
                 tokens INTEGER DEFAULT 0,
-                money REAL DEFAULT 0.0,
+                money INTEGER DEFAULT 0.0,
                 gems INTEGER DEFAULT 0
             );
         """.trimIndent()
@@ -35,21 +35,21 @@ class PlayerCurrencyDAO(private val connection: Connection?) {
         }
     }
 
-    fun updatePlayerCurrency(uuid: String, tokens: Long, money: Double, gems: Int) {
+    fun updatePlayerCurrency(uuid: String, tokens: Int? = null, money: Int? = null, gems: Int? = null) {
         val sql = """
-            INSERT INTO player_currency (uuid, tokens, money, gems) VALUES (?, ?, ?, ?)
-            ON CONFLICT(uuid) DO UPDATE SET
-                tokens = excluded.tokens,
-                money = excluded.money,
-                gems = excluded.gems;
+            UPDATE player_currency
+            SET tokens = COALESCE(?, tokens),
+                money = COALESCE(?, money),
+                gems = COALESCE(?, gems)
+            WHERE uuid = ?;
         """.trimIndent()
 
         try {
             connection?.prepareStatement(sql)?.use { statement ->
-                statement.setString(1, uuid)
-                statement.setLong(2, tokens)
-                statement.setDouble(3, money)
-                statement.setInt(4, gems)
+                statement.setObject(1, tokens)
+                statement.setObject(2, money)
+                statement.setObject(3, gems)
+                statement.setString(4, uuid)
                 statement.executeUpdate()
             }
         } catch (e: SQLException) {
@@ -66,7 +66,7 @@ class PlayerCurrencyDAO(private val connection: Connection?) {
                     if (resultSet.next()) {
                         mapOf(
                             "tokens" to resultSet.getInt("tokens"),
-                            "money" to resultSet.getDouble("money"),
+                            "money" to resultSet.getInt("money"),
                             "gems" to resultSet.getInt("gems")
                         )
                     } else {
@@ -80,35 +80,17 @@ class PlayerCurrencyDAO(private val connection: Connection?) {
         }
     }
 
-    fun getBalance(uuid: String): Double {
-        val sql = "SELECT money FROM player_currency WHERE uuid = ?"
-        return try {
-            connection?.prepareStatement(sql)?.use { statement ->
-                statement.setString(1, uuid)
-                statement.executeQuery().use { resultSet ->
-                    if (resultSet.next()) {
-                        resultSet.getDouble("money")
-                    } else {
-                        0.0
-                    }
-                }
-            } ?: 0.0
-        } catch (e: SQLException) {
-            e.printStackTrace()
-            0.0
-        }
-    }
-
-    fun setInitialBalance(uuid: String, initialBalance: Double) {
+    fun setInitialBalance(uuid: String, initialTokens: Int, initialMoney: Int) {
         val sql = """
-            INSERT INTO player_currency (uuid, tokens, money, gems) VALUES (?, 0, ?, 0)
-            ON CONFLICT(uuid) DO NOTHING;
-        """.trimIndent()
+        INSERT INTO player_currency (uuid, tokens, money, gems) VALUES (?, ?, ?, 0)
+        ON CONFLICT(uuid) DO NOTHING;
+    """.trimIndent()
 
         try {
             connection?.prepareStatement(sql)?.use { statement ->
                 statement.setString(1, uuid)
-                statement.setDouble(2, initialBalance)
+                statement.setInt(2, initialTokens)
+                statement.setInt(3, initialMoney)
                 statement.executeUpdate()
             }
         } catch (e: SQLException) {

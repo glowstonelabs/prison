@@ -1,12 +1,12 @@
 @file:Command(
-    "balance",
-    description = "Shows the player's balance.",
-    usage = "Invalid usage. /balance, /balance <player>",
-    permission = "zela.balance",
-    permissionMessage = "You need zela.balance to do that!"
+    "gems",
+    description = "Shows the player's gems.",
+    usage = "Invalid usage. /gems, /gems <player>",
+    permission = "zela.gems",
+    permissionMessage = "You need zela.gems to do that!"
 )
 
-package wtf.amari.prison.economy.commands.money
+package wtf.amari.prison.economy.commands.gems
 
 import me.honkling.commando.common.annotations.Command
 import org.bukkit.Bukkit
@@ -16,15 +16,15 @@ import wtf.amari.prison.databases.PlayerCurrencyDAO
 import wtf.amari.prison.utils.mm
 import wtf.amari.prison.utils.shorthand
 
-fun balance(executor: Player) {
+fun gems(executor: Player) {
     val dao = PlayerCurrencyDAO(DatabaseManager.getConnection())
     val playerCurrency = dao.getPlayerCurrency(executor.uniqueId.toString())
-    val money = playerCurrency?.get("money") as? Int ?: 0
+    val gems = playerCurrency?.get("gems") as? Int ?: 0
 
-    executor.sendMessage("&f${executor.name}'s &abalance is ${money.shorthand()}".mm())
+    executor.sendMessage("&f${executor.name}'s &agems are ${gems.shorthand()}".mm())
 }
 
-fun balance(executor: Player, targetName: String?) {
+fun gems(executor: Player, targetName: String?) {
     val target = targetName?.let { Bukkit.getPlayer(it) } ?: executor
     if (target == null) {
         executor.sendMessage("&cPlayer not found.".mm())
@@ -32,7 +32,7 @@ fun balance(executor: Player, targetName: String?) {
     }
     val dao = PlayerCurrencyDAO(DatabaseManager.getConnection())
     val playerCurrency = dao.getPlayerCurrency(target.uniqueId.toString())
-    val money = playerCurrency?.get("money") as? Int ?: 0
+    val gems = playerCurrency?.get("gems") as? Int ?: 0
 
-    executor.sendMessage("&c${target.name}'s &abalance is ${money.shorthand()}".mm())
+    executor.sendMessage("&c${target.name}'s &agems are ${gems.shorthand()}".mm())
 }

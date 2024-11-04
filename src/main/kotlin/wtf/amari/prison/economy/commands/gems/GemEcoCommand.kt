@@ -1,12 +1,12 @@
 @file:Command(
-    "moneyeco",
-    description = "Modify the player's balance",
-    usage = "Invalid usage. /moneyeco set <player> <amount>, /moneyeco add <player> <amount>, /moneyeco remove <player> <amount>",
-    permission = "prison.moneyeco.modify",
-    permissionMessage = "You need prison.moneyeco.modify to do that!"
+    "gemeco",
+    description = "Modify the player's gems",
+    usage = "Invalid usage. /gemeco set <player> <amount>, /gemeco add <player> <amount>, /gemeco remove <player> <amount>",
+    permission = "prison.gemeco.modify",
+    permissionMessage = "You need prison.gemeco.modify to do that!"
 )
 
-package wtf.amari.prison.economy.commands.money
+package wtf.amari.prison.economy.commands.gems
 
 import me.honkling.commando.common.annotations.Command
 import org.bukkit.Bukkit
@@ -24,8 +24,8 @@ fun set(executor: Player, targetName: String?, amountStr: String) {
     }
     val dao = PlayerCurrencyDAO(DatabaseManager.getConnection())
     findPlayer(targetName, executor)?.let {
-        dao.updatePlayerCurrency(it.uniqueId.toString(), null, amount, null)
-        executor.sendMessage("&aSet &c${it.name}'s &abalance to ${amount.shorthand()}".mm())
+        dao.updatePlayerCurrency(it.uniqueId.toString(), null, null, amount)
+        executor.sendMessage("&aSet &c${it.name}'s &agems to ${amount.shorthand()}".mm())
     }
 }
 
@@ -38,9 +38,9 @@ fun add(executor: Player, targetName: String?, amountStr: String) {
     val dao = PlayerCurrencyDAO(DatabaseManager.getConnection())
     findPlayer(targetName, executor)?.let {
         val playerCurrency = dao.getPlayerCurrency(it.uniqueId.toString())
-        val currentBalance = playerCurrency?.get("money") as? Int ?: 0
-        dao.updatePlayerCurrency(it.uniqueId.toString(), null, currentBalance + amount, null)
-        executor.sendMessage("&aAdded ${amount.shorthand()} &ato &c${it.name}'s &abalance".mm())
+        val currentGems = playerCurrency?.get("gems") as? Int ?: 0
+        dao.updatePlayerCurrency(it.uniqueId.toString(), null, null, currentGems + amount)
+        executor.sendMessage("&aAdded ${amount.shorthand()} &ato &c${it.name}'s &agems".mm())
     }
 }
 
@@ -53,12 +53,12 @@ fun remove(executor: Player, targetName: String?, amountStr: String) {
     val dao = PlayerCurrencyDAO(DatabaseManager.getConnection())
     findPlayer(targetName, executor)?.let {
         val playerCurrency = dao.getPlayerCurrency(it.uniqueId.toString())
-        val currentBalance = playerCurrency?.get("money") as? Int ?: 0
-        if (currentBalance < amount) {
-            executor.sendMessage("&cCannot remove &a${amount.shorthand()} &cfrom &c${it.name}'s &cbalance. Insufficient funds.".mm())
+        val currentGems = playerCurrency?.get("gems") as? Int ?: 0
+        if (currentGems < amount) {
+            executor.sendMessage("&cCannot remove &a${amount.shorthand()} &cfrom &c${it.name}'s &cgems. Insufficient funds.".mm())
         } else {
-            dao.updatePlayerCurrency(it.uniqueId.toString(), null, currentBalance - amount, null)
-            executor.sendMessage("&aRemoved ${amount.shorthand()} &afrom &c${it.name}'s &abalance".mm())
+            dao.updatePlayerCurrency(it.uniqueId.toString(), null, null, currentGems - amount)
+            executor.sendMessage("&aRemoved ${amount.shorthand()} &afrom &c${it.name}'s &agems".mm())
         }
     }
 }

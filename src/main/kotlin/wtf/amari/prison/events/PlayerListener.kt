@@ -27,7 +27,7 @@ class PlayerListener : Listener {
         }
 
         if (!player.hasPlayedBefore()) {
-            dao.setInitialBalance(player.uniqueId.toString(), 1000.0)
+            dao.setInitialBalance(player.uniqueId.toString(), 1000, 1000)
             scheduler.runTaskLater(instance, Runnable {
                 config.getString("messages.firstjoin")?.let {
                     broadcast("".mm())
