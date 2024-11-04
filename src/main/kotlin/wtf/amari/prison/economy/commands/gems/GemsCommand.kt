@@ -16,6 +16,10 @@ import wtf.amari.prison.databases.PlayerCurrencyDAO
 import wtf.amari.prison.utils.mm
 import wtf.amari.prison.utils.shorthand
 
+/**
+ * Shows the gems of the executing player.
+ * @param executor The player executing the command.
+ */
 fun gems(executor: Player) {
     val dao = PlayerCurrencyDAO(DatabaseManager.getConnection())
     val playerCurrency = dao.getPlayerCurrency(executor.uniqueId.toString())
@@ -24,6 +28,11 @@ fun gems(executor: Player) {
     executor.sendMessage("&f${executor.name}'s &agems are ${gems.shorthand()}".mm())
 }
 
+/**
+ * Shows the gems of the specified player or the executing player if no target is specified.
+ * @param executor The player executing the command.
+ * @param targetName The target player's name.
+ */
 fun gems(executor: Player, targetName: String?) {
     val target = targetName?.let { Bukkit.getPlayer(it) } ?: executor
     if (target == null) {
