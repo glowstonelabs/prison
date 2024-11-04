@@ -5,6 +5,7 @@ import kotlinx.coroutines.Dispatchers
 import me.honkling.commando.spigot.SpigotCommandManager
 import org.bukkit.plugin.java.JavaPlugin
 import wtf.amari.prison.databases.DatabaseManager
+import wtf.amari.prison.events.AutoAnnouncements
 import wtf.amari.prison.events.PlayerListener
 import wtf.amari.prison.pickaxe.events.PickaxeListener
 import wtf.amari.prison.utils.PlaceHolders
@@ -51,6 +52,7 @@ class Prison : JavaPlugin() {
         registerCommands()
         registerEvents()
         registerPlaceholders()
+        AutoAnnouncements()
         DatabaseManager.initialize(this)
         databaseConnection = DatabaseManager.getConnection()
     }
