@@ -64,7 +64,7 @@ object DatabaseManager {
     fun close() {
         try {
             connection?.close()
-            fancyLog("Database connection closed.", "SUCCESS")
+            fancyLog("Database connection closed.", "ERROR")
         } catch (e: SQLException) {
             e.printStackTrace()
             fancyLog("Failed to close database connection: ${e.message}", "ERROR")
