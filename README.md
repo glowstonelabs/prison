@@ -1,5 +1,3 @@
-Here’s a copy-paste-friendly README, modified for a modern OP Prison setup with only prestiges (no rank-ups). 
-
 ---
 
 # Prison
