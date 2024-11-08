@@ -1,5 +1,3 @@
----
-
 # Prison
 
 Welcome to **Prison**, a high-powered Minecraft plugin for OP Prison servers! This plugin is designed to streamline the core mechanics of an overpowered prison server, with boosted rewards, intense progression, and full customization to suit the fast-paced gameplay typical of OP servers.
