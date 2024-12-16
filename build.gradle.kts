@@ -27,7 +27,7 @@ val versions = mapOf(
     "placeholderApi" to "2.11.6",
     "kotlinCoroutines" to "1.9.0",
     "boostedyaml" to "1.3.7",
-    "itemnbtapi" to "2.14.0",
+    "itemnbtapi" to "2.14.1",
     "sqlite" to "3.47.1.0"
 )
 
