@@ -22,7 +22,7 @@ val versions = mapOf(
     "kotlinStdlib" to "2.1.0",
     "commando" to "b0ff9a152d",
     "mcChestUi" to "1.5.6",
-    "dotenv" to "6.4.2",
+    "dotenv" to "6.5.0",
     "anvilGui" to "1.10.2-SNAPSHOT",
     "placeholderApi" to "2.11.6",
     "kotlinCoroutines" to "1.9.0",
