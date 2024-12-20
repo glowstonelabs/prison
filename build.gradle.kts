@@ -25,7 +25,7 @@ val versions = mapOf(
     "dotenv" to "6.5.0",
     "anvilGui" to "1.10.2-SNAPSHOT",
     "placeholderApi" to "2.11.6",
-    "kotlinCoroutines" to "1.9.0",
+    "kotlinCoroutines" to "1.10.1",
     "boostedyaml" to "1.3.7",
     "itemnbtapi" to "2.14.1",
     "sqlite" to "3.47.1.0"
